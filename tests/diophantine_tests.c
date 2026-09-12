@@ -39,28 +39,28 @@ static void test_eea_lde(void) {
     LDE lde = make_lde(9, 5, 137);
     assert_solution_for_lde(lde, eea_lde(lde));
 
-    EEA_Table table = eea_table(lde.a, lde.b);
+    EEA_Table *table = eea_table(lde.a, lde.b);
     assert_solution_for_lde(lde, eea_lde_table(lde, table));
-    assert_solution_for_lde(lde, eea_lde_row(lde, eea_2nd_last_row(lde.a, lde.b)));
-    list_free(table);
+    assert_solution_for_lde(
+        lde, eea_lde_row(lde, eea_2nd_last_row(lde.a, lde.b)));
+    calist_destroy(table);
 
     lde = make_lde(6, 4, 5);
     assert(!eea_lde(lde).exist);
 
     table = eea_table(lde.a, lde.b);
     assert(!eea_lde_table(lde, table).exist);
-    list_free(table);
+    calist_destroy(table);
 }
 
 static void test_lde_result(void) {
-    List result = lde_result(make_lde(0, 0, 0));
+    calist *result = lde_result(make_lde(0, 0, 0));
 
-    assert(result.size > 0);
-    for (int i = 0; i < result.size; ++i) {
-        assert(list_at(result, i, char*) != NULL);
-        free(list_at(result, i, char*));
+    assert(calist_size(result) > 0);
+    for (size_t i = 0; i < calist_size(result); ++i) {
+        assert(calist_get(result, i) != NULL);
     }
-    list_free(result);
+    calist_destroy(result);
 }
 
 int main(void) {

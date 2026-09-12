@@ -2,6 +2,8 @@
 #include <diosolver/inequality.h>
 #include <diosolver/string_utils.h>
 
+#include <stdlib.h>
+
 Solution make_solution(int x, int y) {
     return (Solution) {x, y, true};
 }
@@ -18,8 +20,10 @@ Solution eea_lde(LDE lde) {
     return eea_lde_row(lde, eea_2nd_last_row(lde.a, lde.b));
 }
 
-Solution eea_lde_table(LDE lde, EEA_Table table) {
-    return eea_lde_row(lde, list_at(table, table.size - 2, EEAR));
+Solution eea_lde_table(LDE lde, const EEA_Table *table) {
+    const size_t second_last = calist_size(table) - 2;
+    const EEAR row = *(const EEAR *) calist_get(table, second_last);
+    return eea_lde_row(lde, row);
 }
 
 Solution eea_lde_row(LDE lde, EEAR row) {
@@ -79,9 +83,10 @@ char *n_eq_to_str(int a, int b) {
     return eq_str;
 }
 
-List result;
+static calist *result;
 void append_result(char *str) {
-    list_append(result, str, char*);
+    calist_append(result, str);
+    free(str);
 }
 
 void solve_lde_ab0(int c, Interval xi, Interval yi) {
@@ -145,13 +150,13 @@ void solve_lde_b0(int a, int c, Interval xi, Interval yi) {
 }
 
 void solve_lde_in(int a, int b, int c, Interval xi, Interval yi) {
-    EEA_Table table = eea_table(a, b);
+    EEA_Table *table = eea_table(a, b);
     int d = eea_gcd_table(table);
 
     append_result(fstr("By the Extended Euclidean Algorithm (EEA):\n"));
     append_result(fstr("x\ty\tr\tq\n"));
-    for (int i = 0; i < table.size; ++i) {
-        EEAR eear = list_at(table, i, EEAR);
+    for (size_t i = 0; i < calist_size(table); ++i) {
+        EEAR eear = *(const EEAR *) calist_get(table, i);
         append_result(fstr("%d\t%d\t%d\t%d\n", eear.x, eear.y, eear.r, eear.q));
     }
 
@@ -159,7 +164,7 @@ void solve_lde_in(int a, int b, int c, Interval xi, Interval yi) {
     if (c % d != 0) {
         append_result(fstr("Since %d does not divide %d, ", d, c));
         append_result(fstr("the LDE has no solution.\n"));
-        list_free(table);
+        calist_destroy(table);
         return;
     }
 
@@ -179,7 +184,7 @@ void solve_lde_in(int a, int b, int c, Interval xi, Interval yi) {
     soln_str = lde_soln_to_str(a, b, c, x0, y0);
     append_result(fstr("\t%s\n\n", soln_str));
     free(soln_str);
-    list_free(table);
+    calist_destroy(table);
 
     append_result(fstr("A particular solution is:\n"));
     append_result(fstr("\tx₀ = %d\n", x0));
@@ -210,14 +215,14 @@ void solve_lde_in(int a, int b, int c, Interval xi, Interval yi) {
     }
 }
 
-List lde_result(LDE lde) {
+calist *lde_result(LDE lde) {
     int a = lde.a;
     int b = lde.b;
     int c = lde.c;
     Interval xi = lde.xi;
     Interval yi = lde.yi;
 
-    result = list_init_empty();
+    result = calist_create(ctype_string());
     append_result(fstr("Solving the Linear Diophantine Equation (LDE):\n"));
     append_result(fstr("\t%s\n", lde_to_str(a, b, c)));
     append_result(fstr("Where:\n"));

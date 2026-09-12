@@ -46,7 +46,15 @@ but it is not part of the CMake build.
 ## Build the project
 
 The CLI, GUI, and tests are enabled by default. Because the GUI is enabled,
-the default configure requires Qt 6. From the repository root:
+the default configure requires Qt 6. The core also uses `c-storage-kit` as a
+Git submodule. If the repository was cloned without submodules, initialize it
+before configuring:
+
+```sh
+git submodule update --init --recursive
+```
+
+From the repository root:
 
 ```sh
 cmake -S . -B build

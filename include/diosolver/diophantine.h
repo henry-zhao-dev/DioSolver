@@ -17,6 +17,7 @@
 #ifndef DIOSOLVER_DIOPHANTINE_H
 #define DIOSOLVER_DIOPHANTINE_H
 
+#include <calist.h>
 #include <diosolver/extended_euclidean.h>
 #include <diosolver/interval.h>
 
@@ -112,7 +113,7 @@ Solution eea_lde(LDE lde);
  *
  * `table` must be the table returned by `eea_table(lde.a, lde.b)` (or have
  * the same layout).  The function only reads the table; the caller retains
- * ownership and must release it with `list_free()`.
+ * ownership and must release it with `calist_destroy()`.
  *
  * This function ignores `lde.xi` and `lde.yi`, and `lde.a` and `lde.b` must
  * both be nonzero.
@@ -122,7 +123,7 @@ Solution eea_lde(LDE lde);
  * @return A particular `Solution`, or `NO_SOLN` when `gcd(a, b)` does not
  *         divide `c`.
  */
-Solution eea_lde_table(LDE lde, EEA_Table table);
+Solution eea_lde_table(LDE lde, const EEA_Table *table);
 
 /**
  * Finds one particular integer solution using one EEA table row.
@@ -146,19 +147,19 @@ Solution eea_lde_row(LDE lde, EEAR row);
  * the parameterized complete solution, and the admissible integer values of
  * the parameter when interval constraints are present.  Degenerate cases
  * where `a` or `b` is zero are handled here as well.  A no-solution result is
- * represented by explanatory text in the returned list; this function does
- * not return a `Solution` status value.
+ * represented by explanatory text in the returned `calist`; this function
+ * does not return a `Solution` status value.
  *
- * Each list element is a dynamically allocated `char *`.  The caller owns
- * both the strings and the list storage: free every string, then call
- * `list_free()` on the returned list.
+ * Each calist element is an owned, dynamically allocated string.  The caller
+ * owns the returned calist and must not free individual strings; call
+ * `calist_destroy()` once the result is no longer needed.
  * 
  * @param lde The LDE to solve, including the integer-domain constraints in
  *             `xi` and `yi`.
- * @return A `List` of dynamically allocated strings, one for each output
- *         line.
+ * @return A dynamically allocated `calist` of owned strings, one for each
+ *         output line.
  */
-List lde_result(LDE lde);
+calist *lde_result(LDE lde);
 
 #ifdef __cplusplus
 }

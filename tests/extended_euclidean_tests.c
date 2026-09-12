@@ -4,59 +4,66 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+static void assert_eea_table(const EEA_Table *table,
+                             const EEAR expected[],
+                             size_t expected_size) {
+    assert(calist_size(table) == expected_size);
+    for (size_t i = 0; i < expected_size; ++i) {
+        const EEAR actual = *(const EEAR *) calist_get(table, i);
+        assert(equal_eear(actual, expected[i]));
+    }
+}
+
 static void test_eea_table(void) {
-    EEA_Table table = eea_table(0, 5);
-    assert(equal_eea_table(table,
-        make_list((EEAR[]) {
+    EEA_Table *table = eea_table(0, 5);
+    assert_eea_table(table, (EEAR[]) {
             make_eear(1, 0, 5, 0),
             make_eear(0, 1, 0, 0),
-        }, 2)));
-    list_free(table);
+        }, 2);
+    EEA_Table *copy = calist_dup(table);
+    assert(equal_eea_table(table, copy));
+    calist_destroy(copy);
+    calist_destroy(table);
 
     table = eea_table(-5, -1);
-    assert(equal_eea_table(table,
-        make_list((EEAR[]) {
+    assert_eea_table(table, (EEAR[]) {
             make_eear(1, 0, 5, 0),
             make_eear(0, 1, 1, 0),
             make_eear(1, -5, 0, 5),
-        }, 3)));
-    list_free(table);
+        }, 3);
+    calist_destroy(table);
 
     table = eea_table(5, 5);
-    assert(equal_eea_table(table,
-        make_list((EEAR[]) {
+    assert_eea_table(table, (EEAR[]) {
             make_eear(1, 0, 5, 0),
             make_eear(0, 1, 5, 0),
             make_eear(1, -1, 0, 1),
-        }, 3)));
-    list_free(table);
+        }, 3);
+    calist_destroy(table);
 
     table = eea_table(5, -7);
-    assert(equal_eea_table(table,
-        make_list((EEAR[]) {
+    assert_eea_table(table, (EEAR[]) {
             make_eear(1, 0, 7, 0),
             make_eear(0, 1, 5, 0),
             make_eear(1, -1, 2, 1),
             make_eear(-2, 3, 1, 2),
             make_eear(5, -7, 0, 2),
-        }, 5)));
-    list_free(table);
+        }, 5);
+    calist_destroy(table);
 
     table = eea_table(1386, 322);
-    assert(equal_eea_table(table,
-        make_list((EEAR[]) {
+    assert_eea_table(table, (EEAR[]) {
             make_eear(1, 0, 1386, 0),
             make_eear(0, 1, 322, 0),
             make_eear(1, -4, 98, 4),
             make_eear(-3, 13, 28, 3),
             make_eear(10, -43, 14, 3),
             make_eear(-23, 99, 0, 2),
-        }, 6)));
-    list_free(table);
+        }, 6);
+    calist_destroy(table);
 
     table = eea_table(-2172, 423);
-    assert(equal_eea_table(table,
-        make_list((EEAR[]) {
+    assert_eea_table(table, (EEAR[]) {
             make_eear(1, 0, 2172, 0),
             make_eear(0, 1, 423, 0),
             make_eear(1, -5, 57, 5),
@@ -65,8 +72,8 @@ static void test_eea_table(void) {
             make_eear(-37, 190, 6, 2),
             make_eear(52, -267, 3, 1),
             make_eear(-141, 724, 0, 2),
-        }, 8)));
-    list_free(table);
+        }, 8);
+    calist_destroy(table);
 }
 
 static void test_eea_2nd_last_row(void) {
@@ -104,13 +111,13 @@ static void test_eea_gcd(void) {
     assert(eea_gcd(1386, 322) == 14);
     assert(eea_gcd(-2172, 423) == 3);
 
-    EEA_Table table = eea_table(1386, 322);
+    EEA_Table *table = eea_table(1386, 322);
     assert(eea_gcd_table(table) == 14);
-    list_free(table);
+    calist_destroy(table);
 
     table = eea_table(-2172, 423);
     assert(eea_gcd_table(table) == 3);
-    list_free(table);
+    calist_destroy(table);
 
     assert(eea_gcd_row(make_eear(10, -43, 14, 3)) == 14);
     assert(eea_gcd_row(make_eear(52, 267, 3, 1)) == 3);

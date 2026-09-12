@@ -1,9 +1,57 @@
 #include <diosolver/extended_euclidean.h>
-#include <diosolver/string_utils.h>
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+
+static void *dup_eear(const void *item) {
+    EEAR *copy = malloc(sizeof(*copy));
+    if (copy != NULL) {
+        *copy = *(const EEAR *) item;
+    }
+    return copy;
+}
+
+static void destroy_eear(void *item) {
+    free(item);
+}
+
+static void print_eear(const void *item) {
+    const EEAR *row = item;
+    printf("(%d, %d, %d, %d)", row->x, row->y, row->r, row->q);
+}
+
+static int compare_eear(const void *item1, const void *item2) {
+    const EEAR *row1 = item1;
+    const EEAR *row2 = item2;
+
+    if (row1->x != row2->x) {
+        return (row1->x > row2->x) - (row1->x < row2->x);
+    }
+    if (row1->y != row2->y) {
+        return (row1->y > row2->y) - (row1->y < row2->y);
+    }
+    if (row1->r != row2->r) {
+        return (row1->r > row2->r) - (row1->r < row2->r);
+    }
+    return (row1->q > row2->q) - (row1->q < row2->q);
+}
+
+static ctype *eear_ctype_instance;
+
+static void destroy_eear_ctype(void) {
+    ctype_destroy(eear_ctype_instance);
+    eear_ctype_instance = NULL;
+}
+
+static const ctype *eear_ctype(void) {
+    if (eear_ctype_instance == NULL) {
+        eear_ctype_instance = ctype_create(
+            sizeof(EEAR), dup_eear, destroy_eear, print_eear, compare_eear);
+        atexit(destroy_eear_ctype);
+    }
+    return eear_ctype_instance;
+}
 
 EEAR make_eear(int x, int y, int r, int q) {
     return (EEAR) {x, y, r, q};
@@ -16,13 +64,13 @@ bool equal_eear(EEAR r1, EEAR r2) {
            r1.q == r2.q;
 }
 
-EEA_Table eea_table(int a, int b) {
+EEA_Table *eea_table(int a, int b) {
     EEAR r1 = make_eear(1, 0, fmax(abs(a), abs(b)), 0);
     EEAR r2 = make_eear(0, 1, fmin(abs(a), abs(b)), 0);
 
-    List table = list_init_size(2, EEAR);
-    list_set(table, 0, r1, EEAR);
-    list_set(table, 1, r2, EEAR);
+    EEA_Table *table = calist_create_size(eear_ctype(), 2);
+    calist_append(table, &r1);
+    calist_append(table, &r2);
     
     while (r2.r != 0) {
         int q = r1.r / r2.r;
@@ -32,24 +80,14 @@ EEA_Table eea_table(int a, int b) {
 
         r1 = r2;
         r2 = make_eear(x, y, r, q);
-        list_append(table, r2, EEAR);
+        calist_append(table, &r2);
     }
 
     return table;
 }
 
-bool equal_eea_table(EEA_Table t1, EEA_Table t2) {
-    if (t1.size != t2.size) {
-        return false;
-    }
-
-    for (int i = 0; i < t1.size; ++i) {
-        if (!equal_eear(list_at(t1, i, EEAR), list_at(t2, i, EEAR))) {
-            return false;
-        }
-    }
-
-    return true;
+bool equal_eea_table(const EEA_Table *t1, const EEA_Table *t2) {
+    return calist_equals(t1, t2);
 }
 
 EEAR eea_2nd_last_row(int a, int b) {
@@ -73,8 +111,9 @@ int eea_gcd(int a, int b) {
     return eea_gcd_row(eea_2nd_last_row(a, b));
 }
 
-int eea_gcd_table(EEA_Table table) {
-    return eea_gcd_row(list_at(table, table.size - 2, EEAR));
+int eea_gcd_table(const EEA_Table *table) {
+    const size_t second_last = calist_size(table) - 2;
+    return eea_gcd_row(*(const EEAR *) calist_get(table, second_last));
 }
 
 int eea_gcd_row(EEAR row) {

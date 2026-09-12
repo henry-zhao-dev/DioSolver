@@ -19,13 +19,14 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+add_subdirectory(external/c-storage-kit)
+
 set(DIOSOLVER_CORE_SOURCES
     src/core/string_utils.c
     src/core/diophantine.c
     src/core/extended_euclidean.c
     src/core/inequality.c
     src/core/interval.c
-    src/core/list.c
 )
 
 add_library(diosolver_core STATIC ${DIOSOLVER_CORE_SOURCES})
@@ -41,6 +42,8 @@ target_compile_options(diosolver_core PRIVATE
     $<$<COMPILE_LANG_AND_ID:C,GNU,Clang,AppleClang>:-Wall;-Wextra;-Wpedantic>
     $<$<COMPILE_LANG_AND_ID:C,MSVC>:/W4>
 )
+
+target_link_libraries(diosolver_core PUBLIC CStorageKit::Core)
 
 if(NOT WIN32)
     target_link_libraries(diosolver_core PUBLIC m)
@@ -67,7 +70,6 @@ if(DIOSOLVER_BUILD_TESTS)
     endfunction()
 
     diosolver_add_core_test(string_utils)
-    diosolver_add_core_test(list)
     diosolver_add_core_test(extended_euclidean)
     diosolver_add_core_test(interval)
     diosolver_add_core_test(inequality)

@@ -3,8 +3,8 @@
  * @brief Extended Euclidean Algorithm (EEA) utilities.
  *
  * The EEA computes the greatest common divisor of two integers together with
- * Bézout coefficients.  DioSolver represents the computation as a list of
- * `EEAR` rows.  The final row has remainder zero; the preceding row contains
+ * Bézout coefficients.  DioSolver represents the computation as a `calist`
+ * of `EEAR` rows.  The final row has remainder zero; the preceding row contains
  * the greatest common divisor and the coefficients for the corresponding
  * Bézout combination.
  */
@@ -12,7 +12,7 @@
 #ifndef DIOSOLVER_EXTENDED_EUCLIDEAN_H
 #define DIOSOLVER_EXTENDED_EUCLIDEAN_H
 
-#include <diosolver/list.h>
+#include <calist.h>
 
 #include <stdbool.h>
 
@@ -61,13 +61,13 @@ EEAR make_eear(int x, int y, int r, int q);
 bool equal_eear(EEAR r1, EEAR r2);
 
 /**
- * A `List` whose elements are `EEAR` rows representing an EEA table.
+ * A `calist` whose elements are `EEAR` rows representing an EEA table.
  *
- * Functions that return an `EEA_Table` allocate its row storage dynamically.
- * The caller owns that storage and must release it with `list_free()` when it
- * is no longer needed.
+ * Functions that return an `EEA_Table *` allocate the table dynamically.  The
+ * caller owns the table and must release it with `calist_destroy()` when it is
+ * no longer needed.
  */
-typedef List EEA_Table;
+typedef calist EEA_Table;
 
 /**
  * Generates the EEA table for two integers.
@@ -75,28 +75,31 @@ typedef List EEA_Table;
  * The table begins with the absolute values of `a` and `b`, ordered from
  * larger to smaller, and ends with a zero-remainder row.  The second-to-last
  * row therefore contains `gcd(a, b)` and its Bézout coefficients.  The
- * The returned table does not reference the input values; the caller owns its
- * row storage and must call `list_free()` after use.
+ * returned table deeply copies each row and does not reference the input
+ * values.  The caller owns the table and must call `calist_destroy()` after
+ * use.
  * 
  * @param a The first integer.
  * @param b The second integer.
- * @return An `EEA_Table` containing the EEA rows for `a` and `b`.
+ * @return A dynamically allocated `EEA_Table *` containing the EEA rows for
+ *         `a` and `b`.
  */
-EEA_Table eea_table(int a, int b);
+EEA_Table *eea_table(int a, int b);
 
 /**
  * Checks whether two EEA tables have identical sizes and rows.
  *
  * The tables are read but not modified or freed.
  * 
- * @param t1 The first EEA_Table.
- * @param t2 The second EEA_Table.
+ * @param t1 The first EEA table.
+ * @param t2 The second EEA table.
  * @return `true` if the tables match; otherwise, `false`.
  */
-bool equal_eea_table(EEA_Table t1, EEA_Table t2);
+bool equal_eea_table(const EEA_Table *t1, const EEA_Table *t2);
 
 /**
- * Computes the second-to-last row of an EEA table without allocating a list.
+ * Computes the second-to-last row of an EEA table without allocating a
+ * `calist`.
  *
  * The returned row has remainder `gcd(a, b)` and contains the corresponding
  * Bézout coefficients.  When both inputs are zero, the returned remainder is
@@ -124,12 +127,12 @@ int eea_gcd(int a, int b);
  *
  * `table` must contain the rows returned by `eea_table()`, including its
  * terminal zero-remainder row.  This function only reads the table; ownership
- * remains with the caller.
+ * remains with the caller.  The table must contain at least two rows.
  * 
  * @param table The EEA table containing the computation steps.
  * @return The GCD stored in the table's second-to-last row.
  */
-int eea_gcd_table(EEA_Table table);
+int eea_gcd_table(const EEA_Table *table);
 
 /**
  * Extracts a GCD from an EEA row.

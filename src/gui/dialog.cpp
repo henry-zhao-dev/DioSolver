@@ -55,11 +55,10 @@ ResultDialog::ResultDialog(MainWindow *win, LDE lde) : Dialog(win, "Result") {
     editor->setMinimumSize(400, 400);
     dialogLayout->insertWidget(0, editor);
 
-    List result = lde_result(lde);
-    for (int i = 0; i < result.size; ++i) {
-        char *line = list_at(result, i, char*);
+    calist *result = lde_result(lde);
+    for (size_t i = 0; i < calist_size(result); ++i) {
+        const char *line = static_cast<const char *>(calist_get(result, i));
         editor->insertPlainText(line);
-        free(line);
     }
-    list_free(result);
+    calist_destroy(result);
 }
