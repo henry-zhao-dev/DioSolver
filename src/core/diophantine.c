@@ -1,6 +1,6 @@
-#include "lde.h"
-#include "ineq.h"
-#include "betterc.h"
+#include <diosolver/diophantine.h>
+#include <diosolver/inequality.h>
+#include <diosolver/common.h>
 
 Solution make_solution(int x, int y) {
     return (Solution) {x, y, true};

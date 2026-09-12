@@ -1,0 +1,106 @@
+cmake_minimum_required(VERSION 3.21)
+
+project(DioSolver
+    VERSION 1.1.0
+    DESCRIPTION "A linear Diophantine equation solver"
+    LANGUAGES C CXX
+)
+
+include(GNUInstallDirs)
+
+option(DIOSOLVER_BUILD_CLI "Build the command-line application" ON)
+option(DIOSOLVER_BUILD_GUI "Build the Qt Widgets application" ON)
+option(DIOSOLVER_BUILD_TESTS "Build the core test executable" ON)
+
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_C_EXTENSIONS OFF)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+set(DIOSOLVER_CORE_SOURCES
+    src/core/common.c
+    src/core/diophantine.c
+    src/core/extended_euclidean.c
+    src/core/inequality.c
+    src/core/interval.c
+    src/core/list.c
+)
+
+add_library(diosolver_core STATIC ${DIOSOLVER_CORE_SOURCES})
+add_library(DioSolver::Core ALIAS diosolver_core)
+
+target_include_directories(diosolver_core
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+)
+
+target_compile_options(diosolver_core PRIVATE
+    $<$<COMPILE_LANG_AND_ID:C,GNU,Clang,AppleClang>:-Wall;-Wextra;-Wpedantic>
+    $<$<COMPILE_LANG_AND_ID:C,MSVC>:/W4>
+)
+
+if(NOT WIN32)
+    target_link_libraries(diosolver_core PUBLIC m)
+endif()
+
+if(DIOSOLVER_BUILD_CLI)
+    add_executable(diosolver_cli src/cli/main.c)
+    set_target_properties(diosolver_cli PROPERTIES OUTPUT_NAME diosolver-cli)
+    target_link_libraries(diosolver_cli PRIVATE DioSolver::Core)
+endif()
+
+if(DIOSOLVER_BUILD_TESTS)
+    enable_testing()
+
+    add_executable(diosolver_tests tests/core_tests.c)
+    set_target_properties(diosolver_tests PROPERTIES OUTPUT_NAME diosolver-tests)
+    target_link_libraries(diosolver_tests PRIVATE DioSolver::Core)
+    add_test(NAME diosolver.core COMMAND diosolver_tests)
+endif()
+
+if(DIOSOLVER_BUILD_GUI)
+    find_package(Qt6 REQUIRED COMPONENTS Widgets)
+
+    add_executable(diosolver_gui
+        src/gui/dialog.cpp
+        src/gui/dialog.h
+        src/gui/main.cpp
+        src/gui/main_window.cpp
+        src/gui/main_window.h
+        src/gui/resources/resources.qrc
+    )
+    add_executable(DioSolver::Gui ALIAS diosolver_gui)
+
+    set_target_properties(diosolver_gui PROPERTIES
+        OUTPUT_NAME diosolver-gui
+        AUTOMOC ON
+        AUTORCC ON
+    )
+
+    target_compile_features(diosolver_gui PRIVATE cxx_std_20)
+    target_link_libraries(diosolver_gui PRIVATE
+        DioSolver::Core
+        Qt6::Widgets
+    )
+
+    # Provide a short, explicit build target for the GUI while keeping the
+    # executable target name useful to IDEs and run configurations.
+    add_custom_target(gui DEPENDS diosolver_gui)
+endif()
+
+install(TARGETS diosolver_core
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+if(DIOSOLVER_BUILD_CLI)
+    install(TARGETS diosolver_cli RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+endif()
+
+if(DIOSOLVER_BUILD_GUI)
+    install(TARGETS diosolver_gui RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+endif()

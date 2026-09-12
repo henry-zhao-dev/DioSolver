@@ -1,3 +1,5 @@
 .DS_Store
 build
+cmake-build-*/
+compile_commands.json
 *.pro.user

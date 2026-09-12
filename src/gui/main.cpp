@@ -1,4 +1,4 @@
-#include "MainWindow.h"
+#include "main_window.h"
 
 #include <QApplication>
 #include <QFontDatabase>
@@ -13,8 +13,8 @@ void loadStyleSheet(const QString &filename) {
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
-    QFontDatabase::addApplicationFont(":/font/JetBrainsMono-VariableFont_wght.ttf");
-    loadStyleSheet(":/conf/Styles.qss");
+    QFontDatabase::addApplicationFont(":/font/jetbrains_mono_variable.ttf");
+    loadStyleSheet(":/conf/styles.qss");
 
     MainWindow win;
     win.show();

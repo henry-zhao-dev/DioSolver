@@ -2,10 +2,14 @@
  * "list.h" provides a generic list implementation.
  */
 
-#ifndef LIST_H
-#define LIST_H
+#ifndef DIOSOLVER_LIST_H
+#define DIOSOLVER_LIST_H
 
 #include <stdlib.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /** Initializes an empty list. */
 #define list_init_empty() \
@@ -45,5 +49,9 @@ typedef struct List {
  * Creates a list with specified array and size.
  */
 List make_list(void *arr, int size);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

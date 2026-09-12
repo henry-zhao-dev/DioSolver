@@ -1,5 +1,5 @@
-#include "intvl.h"
-#include "betterc.h"
+#include <diosolver/interval.h>
+#include <diosolver/common.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -107,7 +107,7 @@ int num_int_in(Interval intvl) {
     return int_intvl.high - int_intvl.low + 1;
 }
 
-void test_interval_to_str() {
+void test_interval_to_str(void) {
     char *intvl_str;
     intvl_str = interval_to_str(make_interval(3, 5, true, true));
     assert(equal_str(intvl_str, "(3,5)"));
@@ -146,7 +146,7 @@ void test_interval_to_str() {
     free(intvl_str);
 }
 
-void test_is_valid_interval() {
+void test_is_valid_interval(void) {
     // Valid intervals
     assert(is_valid_interval(make_interval(0, 5, true, true)));     // (0,5)
     assert(is_valid_interval(make_interval(0, 5, true, false)));    // (0,5]
@@ -170,7 +170,7 @@ void test_is_valid_interval() {
     assert(!is_valid_interval(make_interval(0, POS_INF, true, false)));  // (0,inf]
 }
 
-void test_is_in_interval() {
+void test_is_in_interval(void) {
     assert(is_in_interval(5, REAL));
     assert(is_in_interval(5, POS));
     assert(is_in_interval(-5.5, NEG));
@@ -181,7 +181,7 @@ void test_is_in_interval() {
     assert(!is_in_interval(0, INVALID_INTVL));
 }
 
-void test_intersection() {
+void test_intersection(void) {
     assert(equal_interval(
         intersection(
             make_interval(137.0 / 5, POS_INF, true, true),
@@ -279,7 +279,7 @@ void test_intersection() {
         INVALID_INTVL));
 }
 
-void test_int_interval() {
+void test_int_interval(void) {
     assert(equal_interval(
         int_interval(make_interval(137.0 / 5, 274.0 / 9, true, true)),
         make_interval(28, 30, false, false)));
@@ -325,7 +325,7 @@ void test_int_interval() {
         INVALID_INTVL));
 }
 
-void test_num_int_in() {
+void test_num_int_in(void) {
     assert(num_int_in(REAL) == POS_INF);
     assert(num_int_in(POS) == POS_INF);
     assert(num_int_in(NONPOS) == POS_INF);
@@ -336,7 +336,7 @@ void test_num_int_in() {
     assert(num_int_in(make_interval(137.0 / 5, 274.0 / 9, true, false)) == 3);
 }
 
-void test_intvl_h() {
+void test_interval(void) {
     test_interval_to_str();
     test_is_valid_interval();
     test_is_in_interval();

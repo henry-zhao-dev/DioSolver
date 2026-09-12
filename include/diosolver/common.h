@@ -1,11 +1,15 @@
 /**
- * "betterc.h" provides utilities for integer and string operations in C.
+ * "common.h" provides utilities for integer and string operations in C.
  */
 
-#ifndef BETTERC_H
-#define BETTERC_H
+#ifndef DIOSOLVER_COMMON_H
+#define DIOSOLVER_COMMON_H
 
 #include <stdbool.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * Checks if a number is an integer.
@@ -35,8 +39,12 @@ bool equal_str(const char *s1, const char *s2);
 char *fstr(const char *format, ...);
 
 /**
- * Runs unit tests for functions in "betterc.h".
+ * Runs unit tests for functions in "common.h".
  */
-void test_betterc_h();
+void test_common(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
