@@ -52,12 +52,22 @@ static const ctype *eear_ctype(void) {
     return eear_ctype_instance;
 }
 
-static int max_int(int a, int b) {
+static int max_int(const int a, const int b) {
     return a > b ? a : b;
 }
 
-static int min_int(int a, int b) {
+static int min_int(const int a, const int b) {
     return a < b ? a : b;
+}
+
+static EEAR next_eear(const EEAR previous, const EEAR current) {
+    const int quotient = previous.r / current.r;
+
+    return make_eear(
+        previous.x - current.x * quotient,
+        previous.y - current.y * quotient,
+        previous.r % current.r,
+        quotient);
 }
 
 EEAR make_eear(const int x, const int y, const int r, const int q) {
@@ -72,21 +82,19 @@ bool equal_eear(const EEAR r1, const EEAR r2) {
 }
 
 EEA_Table *eea_table(const int a, const int b) {
-    EEAR r1 = make_eear(1, 0, max_int(abs(a), abs(b)), 0);
-    EEAR r2 = make_eear(0, 1, min_int(abs(a), abs(b)), 0);
+    const int abs_a = abs(a);
+    const int abs_b = abs(b);
+    EEAR r1 = make_eear(1, 0, max_int(abs_a, abs_b), 0);
+    EEAR r2 = make_eear(0, 1, min_int(abs_a, abs_b), 0);
 
     EEA_Table *table = calist_create_size(eear_ctype(), 2);
     calist_append(table, &r1);
     calist_append(table, &r2);
-    
-    while (r2.r != 0) {
-        const int q = r1.r / r2.r;
-        const int r = r1.r % r2.r;
-        const int x = r1.x - r2.x * q;
-        const int y = r1.y - r2.y * q;
 
+    while (r2.r != 0) {
+        const EEAR next = next_eear(r1, r2);
         r1 = r2;
-        r2 = make_eear(x, y, r, q);
+        r2 = next;
         calist_append(table, &r2);
     }
 
@@ -97,18 +105,16 @@ bool equal_eea_table(const EEA_Table *t1, const EEA_Table *t2) {
     return calist_equals(t1, t2);
 }
 
-EEAR eea_2nd_last_row(int a, int b) {
-    EEAR r1 = make_eear(1, 0, max_int(abs(a), abs(b)), 0);
-    EEAR r2 = make_eear(0, 1, min_int(abs(a), abs(b)), 0);
+EEAR eea_2nd_last_row(const int a, const int b) {
+    const int abs_a = abs(a);
+    const int abs_b = abs(b);
+    EEAR r1 = make_eear(1, 0, max_int(abs_a, abs_b), 0);
+    EEAR r2 = make_eear(0, 1, min_int(abs_a, abs_b), 0);
 
     while (r2.r != 0) {
-        const int q = r1.r / r2.r;
-        const int r = r1.r % r2.r;
-        const int x = r1.x - r2.x * q;
-        const int y = r1.y - r2.y * q;
-
+        const EEAR next = next_eear(r1, r2);
         r1 = r2;
-        r2 = make_eear(x, y, r, q);
+        r2 = next;
     }
 
     return r1;

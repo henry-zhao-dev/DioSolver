@@ -31,8 +31,10 @@ Solution eea_lde_row(const LDE lde, const EEAR row) {
     const int a = lde.a;
     const int b = lde.b;
     const int c = lde.c;
+    const int abs_a = abs(a);
+    const int abs_b = abs(b);
 
-    int gcd_ab = eea_gcd_row(row);
+    const int gcd_ab = eea_gcd_row(row);
     if (c % gcd_ab != 0) {
         return NO_SOLN;
     }
@@ -41,8 +43,8 @@ Solution eea_lde_row(const LDE lde, const EEAR row) {
     const int x = row.x * factor;
     const int y = row.y * factor;
 
-    Solution soln = make_solution(abs(a) / a, abs(b) / b);
-    if (abs(a) > abs(b)) {
+    Solution soln = make_solution(abs_a / a, abs_b / b);
+    if (abs_a > abs_b) {
         soln.x *= x;
         soln.y *= y;
     } else {
@@ -56,15 +58,15 @@ static char *lde_to_str(const int a, const int b, const int c) {
     char *a_str = (a == 1) ? fstr("") : (a == -1) ? fstr("-") : fstr("%d", a);
     const char op = (b < 0) ? '-' : '+';
     char *b_str = (abs(b) == 1) ? fstr("") : fstr("%d", abs(b));
-    char *lde_str = fstr("%sx %c %sy = %d", a_str, op, b_str, c);
+    char *lde_str = fstr("\t%sx %c %sy = %d\n", a_str, op, b_str, c);
     free(a_str);
     free(b_str);
     return lde_str;
 }
 
 static char *lde_soln_to_str(const int a, const int b, const int c, const int x, const int y) {
-    char *a_str = (a == 1) ? fstr("") : (a == -1) ? fstr("-") : fstr("%d", a);
     const char op = (b < 0) ? '-' : '+';
+    char *a_str = (a == 1) ? fstr("") : (a == -1) ? fstr("-") : fstr("%d", a);
     char *b_str = (abs(b) == 1) ? fstr("") : fstr("%d", abs(b));
     char *lde_str = fstr("%s(%d) %c %s(%d) = %d", a_str, x, op, b_str, y, c);
     free(a_str);
@@ -91,7 +93,7 @@ static void append_result(char *str) {
     free(str);
 }
 
-static void solve_lde_ab0(int c, Interval xi, Interval yi) {
+static void solve_lde_ab0(const int c, const Interval xi, const Interval yi) {
     if (c != 0) {
         append_result(fstr("Since a = 0, b = 0, and c ≠ 0, the LDE has no solution.\n"));
         return;
@@ -117,9 +119,9 @@ static void solve_lde_a0(const int b, const int c, const Interval xi, const Inte
     append_result(fstr("x is any integer in the interval %s\n", xi_str));
     free(xi_str);
 
-    int y = c / b;
+    const int y = c / b;
     append_result(fstr("y = %d\n", y));
-    
+
     if (!is_in_interval(y, yi)) {
         char *yi_str = interval_to_str(yi);
         append_result(fstr("However, %d is not in the interval %s\n", y, yi_str));
@@ -135,9 +137,9 @@ static void solve_lde_b0(const int a, const int c, const Interval xi, const Inte
         return;
     }
 
-    int x = c / a;
+    const int x = c / a;
     append_result(fstr("x = %d\n", x));
-    
+
     if (!is_in_interval(x, xi)) {
         char *xi_str = interval_to_str(xi);
         append_result(fstr("However, %d is not in the interval %s\n", x, xi_str));
@@ -161,7 +163,7 @@ static void solve_lde_in(
     append_result(fstr("By the Extended Euclidean Algorithm (EEA):\n"));
     append_result(fstr("x\ty\tr\tq\n"));
     for (size_t i = 0; i < calist_size(table); ++i) {
-        EEAR eear = *(const EEAR *) calist_get(table, i);
+        const EEAR eear = *(const EEAR *) calist_get(table, i);
         append_result(fstr("%d\t%d\t%d\t%d\n", eear.x, eear.y, eear.r, eear.q));
     }
 
@@ -200,8 +202,9 @@ static void solve_lde_in(
     append_result(fstr("\ty = %s\n", y_eq));
     free(x_eq);
     free(y_eq);
-    
-    Interval n_intvl = int_interval(solve_ineq_sys(x0, b/d, y0, -a/d, xi, yi));
+
+    const Interval n_intvl = int_interval(
+        solve_ineq_sys(x0, b / d, y0, -a / d, xi, yi));
     if (is_valid_interval(n_intvl)) {
         char *n_intvl_str = interval_to_str(n_intvl);
         append_result(fstr("Where:\n\tn ∈ %s\n", n_intvl_str));
@@ -227,7 +230,7 @@ calist *lde_result(const LDE lde) {
 
     result = calist_create(ctype_string());
     append_result(fstr("Solving the Linear Diophantine Equation (LDE):\n"));
-    append_result(fstr("\t%s\n", lde_to_str(a, b, c)));
+    append_result(lde_to_str(a, b, c));
     append_result(fstr("Where:\n"));
     char *xi_str = interval_to_str(xi);
     char *yi_str = interval_to_str(yi);
