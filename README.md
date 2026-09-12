@@ -23,13 +23,15 @@ It walks through the process of:
 ## See it in action
 
 The Qt interface is designed to make the mathematics approachable: enter an
-equation, choose the domains, and inspect the resulting work.
+equation, choose the domains, and inspect the resulting work. The screenshots
+below are stored in `docs/screenshots/` so they remain available with the
+repository.
 
-<img width="562" alt="DioSolver equation input" src="https://github.com/user-attachments/assets/241a021d-1b1e-437b-be86-9edfdcc546cf" />
+<img width="562" alt="DioSolver equation input" src="docs/screenshots/diosolver-home.png" />
 
-<img width="708" alt="DioSolver solution steps" src="https://github.com/user-attachments/assets/0ec91f7c-06a4-4fae-b1b1-4750ecd376db" />
+<img width="708" alt="DioSolver solution steps" src="docs/screenshots/diosolver-result.png" />
 
-<img width="582" alt="DioSolver result" src="https://github.com/user-attachments/assets/6dc3a770-4c2c-4a5f-a52a-5950ecd376db" />
+<img width="582" alt="DioSolver about dialog" src="docs/screenshots/diosolver-about.png" />
 
 ## A little about the project
 
