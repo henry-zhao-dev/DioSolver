@@ -1,5 +1,4 @@
 #include <diosolver/string_utils.h>
-
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,7 +19,7 @@ char *fstr(const char *format, ...) {
         return NULL;
     }
 
-    const size_t str_len = (size_t) formatted_len + 1;
+    const size_t str_len = (size_t)formatted_len + 1;
 
     char *result = malloc(str_len);
     if (result == NULL) {

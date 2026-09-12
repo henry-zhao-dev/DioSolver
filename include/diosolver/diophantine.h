@@ -26,7 +26,10 @@ extern "C" {
 #endif
 
 /** A `Solution` value indicating that no solution was found. */
-#define NO_SOLN (Solution) {0, 0, false}
+#define NO_SOLN     \
+    (Solution) {    \
+        0, 0, false \
+    }
 
 /**
  * Represents one candidate solution to an LDE.
@@ -35,8 +38,8 @@ extern "C" {
  * `NO_SOLN` macro provides the conventional value for a failed solve.
  */
 typedef struct Solution {
-    int x;      /**< The integer value assigned to `x`. */
-    int y;      /**< The integer value assigned to `y`. */
+    int x; /**< The integer value assigned to `x`. */
+    int y; /**< The integer value assigned to `y`. */
 
     bool exist; /**< True when this value represents a solution. */
 } Solution;

@@ -11,8 +11,8 @@
 #ifndef DIOSOLVER_INTERVAL_H
 #define DIOSOLVER_INTERVAL_H
 
-#include <stdbool.h>
 #include <limits.h>
+#include <stdbool.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -22,25 +22,43 @@ extern "C" {
 #define POS_INF INT_MAX
 
 /** Sentinel value used as the negative-infinity bound. */
-#define NEG_INF (- POS_INF)
+#define NEG_INF (-POS_INF)
 
 /** The unbounded interval `(-inf, inf)`. */
-#define REAL (Interval) {NEG_INF, POS_INF, true, true, true}
+#define REAL                               \
+    (Interval) {                           \
+        NEG_INF, POS_INF, true, true, true \
+    }
 
 /** The positive interval `(0, inf)`. */
-#define POS (Interval) {0, POS_INF, true, true, true}
+#define POS                          \
+    (Interval) {                     \
+        0, POS_INF, true, true, true \
+    }
 
 /** The negative interval `(-inf, 0)`. */
-#define NEG (Interval) {NEG_INF, 0, true, true, true}
+#define NEG                          \
+    (Interval) {                     \
+        NEG_INF, 0, true, true, true \
+    }
 
 /** The non-positive interval `(-inf, 0]`. */
-#define NONPOS (Interval) {NEG_INF, 0, true, false, true}
+#define NONPOS                        \
+    (Interval) {                      \
+        NEG_INF, 0, true, false, true \
+    }
 
 /** The non-negative interval `[0, inf)`. */
-#define NONNEG (Interval) {0, POS_INF, false, true, true}
+#define NONNEG                        \
+    (Interval) {                      \
+        0, POS_INF, false, true, true \
+    }
 
 /** Invalid interval sentinel with `valid` set to false. */
-#define INVALID_INTVL (Interval) {0, 0, true, true, false}
+#define INVALID_INTVL           \
+    (Interval) {                \
+        0, 0, true, true, false \
+    }
 
 /**
  * Represents a real mathematical interval.
@@ -50,12 +68,12 @@ extern "C" {
  * true and its bounds satisfy `is_valid_interval()`.
  */
 typedef struct Interval {
-    double low;         /**< Lower bound of the interval. */
-    double high;        /**< Upper bound of the interval. */
-    bool left_open;     /**< True when the lower endpoint is excluded. */
-    bool right_open;    /**< True when the upper endpoint is excluded. */
+    double low;      /**< Lower bound of the interval. */
+    double high;     /**< Upper bound of the interval. */
+    bool left_open;  /**< True when the lower endpoint is excluded. */
+    bool right_open; /**< True when the upper endpoint is excluded. */
 
-    bool valid;         /**< True when the interval has been marked valid. */
+    bool valid; /**< True when the interval has been marked valid. */
 } Interval;
 
 /**

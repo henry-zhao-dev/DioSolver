@@ -1,13 +1,13 @@
 #include "dialog.h"
-#include "main_window.h"
-#include <diosolver/diophantine.h>
 
+#include "main_window.h"
+
+#include <QDesktopServices>
 #include <QLabel>
 #include <QTextBrowser>
 #include <QTextEdit>
-#include <QDesktopServices>
-
 #include <cstdlib>
+#include <diosolver/diophantine.h>
 
 Dialog::Dialog(MainWindow *win, const QString &title) : QDialog(win) {
     setWindowTitle(title);

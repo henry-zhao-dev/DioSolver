@@ -1,6 +1,5 @@
-#include <diosolver/string_utils.h>
-
 #include <assert.h>
+#include <diosolver/string_utils.h>
 #include <stdio.h>
 #include <stdlib.h>
 

@@ -1,12 +1,12 @@
 #pragma once
 
-#include <QMainWindow>
 #include <QBoxLayout>
-#include <QLineEdit>
+#include <QCheckBox>
+#include <QComboBox>
 #include <QFrame>
 #include <QGroupBox>
-#include <QComboBox>
-#include <QCheckBox>
+#include <QLineEdit>
+#include <QMainWindow>
 
 class LDEFrame;
 class DomainBox;
@@ -18,13 +18,13 @@ struct LDE;
 class MainWindow : public QMainWindow {
     Q_OBJECT
 
-public:
+  public:
     MainWindow(QWidget *parent = nullptr);
 
     void clearLDE();
     LDE solveLDE();
 
-private:
+  private:
     QVBoxLayout *mainLayout;
     LDEFrame *ldeFrame;
 };
@@ -32,7 +32,7 @@ private:
 class IntLineEdit : public QLineEdit {
     Q_OBJECT
 
-public:
+  public:
     IntLineEdit(QWidget *parent = nullptr);
 
     int value();
@@ -41,7 +41,7 @@ public:
 class LDEFrame : public QFrame {
     Q_OBJECT
 
-public:
+  public:
     LDEFrame(MainWindow *win);
 
     int aValue();
@@ -51,7 +51,7 @@ public:
     Interval xInterval();
     Interval yInterval();
 
-private:
+  private:
     IntLineEdit *aField;
     IntLineEdit *bField;
     IntLineEdit *cField;
@@ -63,12 +63,12 @@ private:
 class DomainBox : public QGroupBox {
     Q_OBJECT
 
-public:
+  public:
     DomainBox(const QString &title, LDEFrame *frame);
 
     Interval interval();
 
-private:
+  private:
     QComboBox *intvlBox;
     IntervalFrame *intvlFrame;
 };
@@ -76,12 +76,12 @@ private:
 class IntervalFrame : public QFrame {
     Q_OBJECT
 
-public:
+  public:
     IntervalFrame(DomainBox *domainBox);
 
     Interval customInterval();
 
-private:
+  private:
     IntLineEdit *fromBox;
     IntLineEdit *toBox;
 
@@ -92,6 +92,6 @@ private:
 class ButtonFrame : public QFrame {
     Q_OBJECT
 
-public:
+  public:
     ButtonFrame(MainWindow *win);
 };

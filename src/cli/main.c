@@ -1,9 +1,8 @@
+#include <ctype.h>
+#include <diosolver/diophantine.h>
 #include <diosolver/extended_euclidean.h>
 #include <diosolver/interval.h>
-#include <diosolver/diophantine.h>
-
 #include <stdio.h>
-#include <ctype.h>
 #include <stdlib.h>
 
 void clear_screen(void) {
@@ -85,12 +84,11 @@ Interval select_domain(char var) {
 void solve_lde(int a, int b, int c, Interval xi, Interval yi) {
     calist *result = lde_result(make_lde_in(a, b, c, xi, yi));
     for (size_t i = 0; i < calist_size(result); ++i) {
-        const char *line = (const char *) calist_get(result, i);
+        const char *line = (const char *)calist_get(result, i);
         printf("%s", line);
     }
     calist_destroy(result);
 }
-
 
 int main(void) {
     // --- Tests ---
@@ -128,11 +126,11 @@ int main(void) {
     printf("Format: ax + by = c\n\n");
 
     int a, b, c;
-    printf("Enter the value of a: ");    
+    printf("Enter the value of a: ");
     scanf("%d", &a);
-    printf("Enter the value of b: ");    
+    printf("Enter the value of b: ");
     scanf("%d", &b);
-    printf("Enter the value of c: ");    
+    printf("Enter the value of c: ");
     scanf("%d", &c);
 
     Interval xi = select_domain('x');

@@ -1,20 +1,18 @@
 #include <diosolver/diophantine.h>
 #include <diosolver/inequality.h>
 #include <diosolver/string_utils.h>
-
 #include <stdlib.h>
 
 Solution make_solution(const int x, const int y) {
-    return (Solution) {.x = x, .y = y, .exist = true};
+    return (Solution){.x = x, .y = y, .exist = true};
 }
 
 LDE make_lde(const int a, const int b, const int c) {
-    return (LDE) {.a = a, .b = b, .c = c, .xi = REAL, .yi = REAL};
+    return (LDE){.a = a, .b = b, .c = c, .xi = REAL, .yi = REAL};
 }
 
-LDE make_lde_in(const int a, const int b, const int c,
-                const Interval xi, const Interval yi) {
-    return (LDE) {.a = a, .b = b, .c = c, .xi = xi, .yi = yi};
+LDE make_lde_in(const int a, const int b, const int c, const Interval xi, const Interval yi) {
+    return (LDE){.a = a, .b = b, .c = c, .xi = xi, .yi = yi};
 }
 
 Solution eea_lde(const LDE lde) {
@@ -23,7 +21,7 @@ Solution eea_lde(const LDE lde) {
 
 Solution eea_lde_table(const LDE lde, const EEA_Table *table) {
     const size_t second_last = calist_size(table) - 2;
-    const EEAR row = *(const EEAR *) calist_get(table, second_last);
+    const EEAR row = *(const EEAR *)calist_get(table, second_last);
     return eea_lde_row(lde, row);
 }
 
@@ -153,17 +151,15 @@ static void solve_lde_b0(const int a, const int c, const Interval xi, const Inte
     free(yi_str);
 }
 
-static void solve_lde_in(
-    const int a, const int b, const int c,
-    const Interval xi, const Interval yi)
-{
+static void solve_lde_in(const int a, const int b, const int c, const Interval xi,
+                         const Interval yi) {
     EEA_Table *table = eea_table(a, b);
     const int d = eea_gcd_table(table);
 
     append_result(fstr("By the Extended Euclidean Algorithm (EEA):\n"));
     append_result(fstr("x\ty\tr\tq\n"));
     for (size_t i = 0; i < calist_size(table); ++i) {
-        const EEAR eear = *(const EEAR *) calist_get(table, i);
+        const EEAR eear = *(const EEAR *)calist_get(table, i);
         append_result(fstr("%d\t%d\t%d\t%d\n", eear.x, eear.y, eear.r, eear.q));
     }
 
@@ -196,15 +192,14 @@ static void solve_lde_in(
     append_result(fstr("\ty₀ = %d\n", y0));
 
     append_result(fstr("\nThe complete solution is:\n"));
-    char *x_eq = n_eq_to_str(x0, b/d);
-    char *y_eq = n_eq_to_str(y0, -a/d);
+    char *x_eq = n_eq_to_str(x0, b / d);
+    char *y_eq = n_eq_to_str(y0, -a / d);
     append_result(fstr("\tx = %s\n", x_eq));
     append_result(fstr("\ty = %s\n", y_eq));
     free(x_eq);
     free(y_eq);
 
-    const Interval n_intvl = int_interval(
-        solve_ineq_sys(x0, b / d, y0, -a / d, xi, yi));
+    const Interval n_intvl = int_interval(solve_ineq_sys(x0, b / d, y0, -a / d, xi, yi));
     if (is_valid_interval(n_intvl)) {
         char *n_intvl_str = interval_to_str(n_intvl);
         append_result(fstr("Where:\n\tn ∈ %s\n", n_intvl_str));
