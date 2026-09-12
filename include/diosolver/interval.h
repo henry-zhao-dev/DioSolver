@@ -111,11 +111,6 @@ Interval int_interval(Interval intvl);
  */
 int num_int_in(Interval intvl);
 
-/**
- * Runs unit tests for functions in "interval.h".
- */
-void test_interval(void);
-
 #ifdef __cplusplus
 }
 #endif

@@ -10,7 +10,7 @@ include(GNUInstallDirs)
 
 option(DIOSOLVER_BUILD_CLI "Build the command-line application" ON)
 option(DIOSOLVER_BUILD_GUI "Build the Qt Widgets application" ON)
-option(DIOSOLVER_BUILD_TESTS "Build the core test executable" ON)
+option(DIOSOLVER_BUILD_TESTS "Build the core test executables" ON)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -55,10 +55,23 @@ endif()
 if(DIOSOLVER_BUILD_TESTS)
     enable_testing()
 
-    add_executable(diosolver_tests tests/core_tests.c)
-    set_target_properties(diosolver_tests PROPERTIES OUTPUT_NAME diosolver-tests)
-    target_link_libraries(diosolver_tests PRIVATE DioSolver::Core)
-    add_test(NAME diosolver.core COMMAND diosolver_tests)
+    function(diosolver_add_core_test module)
+        set(target diosolver_test_${module})
+
+        add_executable(${target} tests/${module}_tests.c)
+        set_target_properties(${target} PROPERTIES
+            OUTPUT_NAME diosolver-test-${module}
+        )
+        target_link_libraries(${target} PRIVATE DioSolver::Core)
+        add_test(NAME diosolver.${module} COMMAND ${target})
+    endfunction()
+
+    diosolver_add_core_test(common)
+    diosolver_add_core_test(list)
+    diosolver_add_core_test(extended_euclidean)
+    diosolver_add_core_test(interval)
+    diosolver_add_core_test(inequality)
+    diosolver_add_core_test(diophantine)
 endif()
 
 if(DIOSOLVER_BUILD_GUI)

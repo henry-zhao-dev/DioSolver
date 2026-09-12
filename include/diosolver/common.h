@@ -38,11 +38,6 @@ bool equal_str(const char *s1, const char *s2);
  */
 char *fstr(const char *format, ...);
 
-/**
- * Runs unit tests for functions in "common.h".
- */
-void test_common(void);
-
 #ifdef __cplusplus
 }
 #endif

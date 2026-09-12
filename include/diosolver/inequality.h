@@ -56,11 +56,6 @@ Interval solve_ineq_in(int con, int coeff, Interval intvl);
 Interval solve_ineq_sys(int x_con, int x_coeff, int y_con, int y_coeff,
                         Interval xi, Interval yi);
 
-/**
- * Runs unit tests for functions in "inequality.h".
- */
-void test_inequality(void);
-
 #ifdef __cplusplus
 }
 #endif

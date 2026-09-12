@@ -54,6 +54,13 @@ cmake --build build
 ctest --test-dir build --output-on-failure
 ```
 
+The core tests are split by module, so an individual area can be run with
+CTest's name filter. For example:
+
+```sh
+ctest --test-dir build -R diosolver.interval --output-on-failure
+```
+
 Run the CLI with:
 
 ```sh
