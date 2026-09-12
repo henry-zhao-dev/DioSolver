@@ -1,5 +1,5 @@
-#include "eea.h"
-#include "betterc.h"
+#include <diosolver/extended_euclidean.h>
+#include <diosolver/common.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -82,7 +82,7 @@ int eea_gcd_row(EEAR row) {
     return row.r;
 }
 
-void test_eea_table() {
+void test_eea_table(void) {
     EEA_Table table;
     table = eea_table(0, 5);
     assert(equal_eea_table(table,
@@ -148,7 +148,7 @@ void test_eea_table() {
     list_free(table);
 }
 
-void test_eea_2nd_last_row() {
+void test_eea_2nd_last_row(void) {
     assert(equal_eear(
         eea_2nd_last_row(0, 5),
         make_eear(1, 0, 5, 0)));
@@ -174,7 +174,7 @@ void test_eea_2nd_last_row() {
         make_eear(52, -267, 3, 1)));
 }
 
-void test_eea_gcd() {
+void test_eea_gcd(void) {
     assert(eea_gcd(0, 5) == 5);
     assert(eea_gcd(-5, 0) == 5);
     assert(eea_gcd(-5, -1) == 1);
@@ -196,7 +196,7 @@ void test_eea_gcd() {
     assert(eea_gcd_row(make_eear(52, 267, 3, 1)) == 3);
 }
 
-void test_eea_h() {
+void test_extended_euclidean(void) {
     test_eea_table();
     test_eea_2nd_last_row();
     test_eea_gcd();

@@ -1,14 +1,18 @@
 /**
- * "eea.h" provides the implementation of the Extended Euclidean Algorithm (EEA)
+ * "extended_euclidean.h" provides the implementation of the Extended Euclidean Algorithm (EEA)
  * and its applications, such as finding the GCD of two numbers.
  */
 
-#ifndef EEA_H
-#define EEA_H
+#ifndef DIOSOLVER_EXTENDED_EUCLIDEAN_H
+#define DIOSOLVER_EXTENDED_EUCLIDEAN_H
 
-#include "list.h"
+#include <diosolver/list.h>
 
 #include <stdbool.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * Represents a single row in the EEA table, with each field representing
@@ -94,8 +98,12 @@ int eea_gcd_table(EEA_Table table);
 int eea_gcd_row(EEAR row);
 
 /**
- * Runs unit tests for functions in "eea.h".
+ * Runs unit tests for functions in "extended_euclidean.h".
  */
-void test_eea_h();
+void test_extended_euclidean(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

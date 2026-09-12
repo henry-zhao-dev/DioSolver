@@ -1,4 +1,4 @@
-#include "ineq.h"
+#include <diosolver/inequality.h>
 
 #include <assert.h>
 
@@ -40,7 +40,7 @@ Interval solve_ineq_sys(int x_con, int x_coeff, int y_con, int y_coeff,
                         solve_ineq_in(y_con, y_coeff, yi));
 }
 
-void test_solve_ineq() {
+void test_solve_ineq(void) {
     assert(equal_interval(
         solve_ineq(-137, 5, GREATER, 0),
         make_interval(137.0 / 5, POS_INF, true, true)));
@@ -106,7 +106,7 @@ void test_solve_ineq() {
         REAL));
 }
 
-void test_solve_ineq_in() {
+void test_solve_ineq_in(void) {
     assert(equal_interval(
         solve_ineq_in(50, 4, POS),
         make_interval(-50.0 / 4, POS_INF, true, true)));
@@ -128,7 +128,7 @@ void test_solve_ineq_in() {
         make_interval(NEG_INF, -50.0 / 4, true, true)));
 }
 
-void test_solve_ineq_sys() {
+void test_solve_ineq_sys(void) {
     assert(equal_interval(
         solve_ineq_sys(-137, 5, 274, -9, POS, POS),
         make_interval(137.0 / 5, 274.0 / 9, true, true)));
@@ -154,7 +154,7 @@ void test_solve_ineq_sys() {
         make_interval(50.0 / 4, POS_INF, true, true)));
 }
 
-void test_ineq_h() {
+void test_inequality(void) {
     test_solve_ineq();
     test_solve_ineq_in();
     test_solve_ineq_sys();

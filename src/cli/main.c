@@ -1,13 +1,11 @@
-#include "betterc.h"
-#include "eea.h"
-#include "intvl.h"
-#include "ineq.h"
-#include "lde.h"
+#include <diosolver/extended_euclidean.h>
+#include <diosolver/interval.h>
+#include <diosolver/diophantine.h>
 
 #include <stdio.h>
 #include <ctype.h>
 
-void clear_screen() {
+void clear_screen(void) {
 #if defined(_WIN32)
     system("cls");
 #else
@@ -94,12 +92,7 @@ void solve_lde(int a, int b, int c, Interval xi, Interval yi) {
 }
 
 
-int main() {
-    test_betterc_h();
-    test_eea_h();
-    test_intvl_h();
-    test_ineq_h();
-
+int main(void) {
     // --- Tests ---
     // clear_screen();
     // solve_lde(0, 0, 0, REAL, NONNEG);

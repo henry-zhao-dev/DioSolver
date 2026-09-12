@@ -1,14 +1,19 @@
 /**
- * "intvl.h" provides functions and macros for working with intervals.
+ * "interval.h" provides functions and macros for working with intervals.
  */
 
-#ifndef INTVL_H
-#define INTVL_H
+#ifndef DIOSOLVER_INTERVAL_H
+#define DIOSOLVER_INTERVAL_H
 
 #include <stdbool.h>
+#include <limits.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 // Positive and negative infinity
-#define POS_INF __INT_MAX__
+#define POS_INF INT_MAX
 #define NEG_INF -POS_INF
 
 // Common intervals
@@ -107,8 +112,12 @@ Interval int_interval(Interval intvl);
 int num_int_in(Interval intvl);
 
 /**
- * Runs unit tests for functions in "intvl.h".
+ * Runs unit tests for functions in "interval.h".
  */
-void test_intvl_h();
+void test_interval(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

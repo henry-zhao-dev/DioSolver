@@ -1,4 +1,4 @@
-#include "betterc.h"
+#include <diosolver/common.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -36,7 +36,7 @@ char *fstr(const char *format, ...) {
     return result;
 }
 
-void test_betterc_h() {
+void test_common(void) {
     assert(is_int(0));
     assert(is_int(123456789));
     assert(is_int(-123456789.0000));

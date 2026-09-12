@@ -1,16 +1,16 @@
 /**
- * "lde.h" provides functions for solving linear Diophantine equations (LDE).
+ * "diophantine.h" provides functions for solving linear Diophantine equations (LDE).
  */
 
-#ifndef LDE_H
-#define LDE_H
+#ifndef DIOSOLVER_DIOPHANTINE_H
+#define DIOSOLVER_DIOPHANTINE_H
+
+#include <diosolver/extended_euclidean.h>
+#include <diosolver/interval.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include "eea.h"
-#include "intvl.h"
 
 // Represents no solution for an LDE with the field "exist" set to false
 #define NO_SOLN (Solution) {0, 0, false}

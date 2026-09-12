@@ -1,10 +1,12 @@
-#include "MainWindow.h"
-#include "Dialog.h"
-#include "../C-Backend/lde.h"
+#include "main_window.h"
+#include "dialog.h"
+#include <diosolver/diophantine.h>
 
 #include <QGridLayout>
+#include <QIntValidator>
 #include <QLabel>
 #include <QPushButton>
+#include <QStringList>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     setWindowTitle("DioSolver");

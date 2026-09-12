@@ -1,11 +1,15 @@
 /**
- * "ineq.h" provides functions for solving inequalities involving intervals.
+ * "inequality.h" provides functions for solving inequalities involving intervals.
  */
 
-#ifndef INEQ_H
-#define INEQ_H
+#ifndef DIOSOLVER_INEQUALITY_H
+#define DIOSOLVER_INEQUALITY_H
 
-#include "intvl.h"
+#include <diosolver/interval.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * Operators for inequalities.
@@ -53,8 +57,12 @@ Interval solve_ineq_sys(int x_con, int x_coeff, int y_con, int y_coeff,
                         Interval xi, Interval yi);
 
 /**
- * Runs unit tests for functions in "ineq.h".
+ * Runs unit tests for functions in "inequality.h".
  */
-void test_ineq_h();
+void test_inequality(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
