@@ -3,7 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static void assert_eea_table(const EEA_Table *table, const EEAR expected[], size_t expected_size) {
+static void assert_eea_table(const EEA_Table *table, const EEAR expected[],
+                             size_t expected_size) {
     assert(calist_size(table) == expected_size);
     for (size_t i = 0; i < expected_size; ++i) {
         const EEAR actual = *(const EEAR *)calist_get(table, i);

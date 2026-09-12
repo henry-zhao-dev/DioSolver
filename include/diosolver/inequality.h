@@ -75,7 +75,8 @@ Interval solve_ineq_in(int con, int coeff, Interval intvl);
  *         constraints, or `INVALID_INTVL` when the intersection is empty or
  *         either input interval is invalid.
  */
-Interval solve_ineq_sys(int x_con, int x_coeff, int y_con, int y_coeff, Interval xi, Interval yi);
+Interval solve_ineq_sys(int x_con, int x_coeff, int y_con, int y_coeff,
+                        Interval xi, Interval yi);
 
 #ifdef __cplusplus
 }

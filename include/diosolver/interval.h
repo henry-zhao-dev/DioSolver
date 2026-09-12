@@ -90,7 +90,8 @@ typedef struct Interval {
  * @param right_open True to exclude the upper endpoint; false to include it.
  * @return An initialized `Interval` with `valid` set to true.
  */
-Interval make_interval(double low, double high, bool left_open, bool right_open);
+Interval make_interval(double low, double high, bool left_open,
+                       bool right_open);
 
 /**
  * Checks whether two intervals have identical fields.

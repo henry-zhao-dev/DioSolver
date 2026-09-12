@@ -44,8 +44,8 @@ static void destroy_eear_ctype(void) {
 
 static const ctype *eear_ctype(void) {
     if (eear_ctype_instance == NULL) {
-        eear_ctype_instance =
-            ctype_create(sizeof(EEAR), dup_eear, destroy_eear, print_eear, compare_eear);
+        eear_ctype_instance = ctype_create(sizeof(EEAR), dup_eear, destroy_eear,
+                                           print_eear, compare_eear);
         atexit(destroy_eear_ctype);
     }
     return eear_ctype_instance;
@@ -62,8 +62,9 @@ static int min_int(const int a, const int b) {
 static EEAR next_eear(const EEAR previous, const EEAR current) {
     const int quotient = previous.r / current.r;
 
-    return make_eear(previous.x - current.x * quotient, previous.y - current.y * quotient,
-                     previous.r % current.r, quotient);
+    return make_eear(previous.x - current.x * quotient,
+                     previous.y - current.y * quotient, previous.r % current.r,
+                     quotient);
 }
 
 EEAR make_eear(const int x, const int y, const int r, const int q) {

@@ -29,7 +29,8 @@ AboutDialog::AboutDialog(MainWindow *win) : Dialog(win, "About DioSolver") {
     editor->setOpenExternalLinks(true);
     dialogLayout->insertWidget(0, editor);
 
-    editor->insertHtml("<b><span style='font-size: 16px'>LDE Solver</span></b><br>");
+    editor->insertHtml(
+        "<b><span style='font-size: 16px'>LDE Solver</span></b><br>");
     editor->append("Developed by: Henry Zhao\n");
 
     editor->append("Relevant Theorems:");

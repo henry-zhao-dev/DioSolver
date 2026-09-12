@@ -11,7 +11,8 @@ LDE make_lde(const int a, const int b, const int c) {
     return (LDE){.a = a, .b = b, .c = c, .xi = REAL, .yi = REAL};
 }
 
-LDE make_lde_in(const int a, const int b, const int c, const Interval xi, const Interval yi) {
+LDE make_lde_in(const int a, const int b, const int c, const Interval xi,
+                const Interval yi) {
     return (LDE){.a = a, .b = b, .c = c, .xi = xi, .yi = yi};
 }
 
@@ -62,7 +63,8 @@ static char *lde_to_str(const int a, const int b, const int c) {
     return lde_str;
 }
 
-static char *lde_soln_to_str(const int a, const int b, const int c, const int x, const int y) {
+static char *lde_soln_to_str(const int a, const int b, const int c, const int x,
+                             const int y) {
     const char op = (b < 0) ? '-' : '+';
     char *a_str = (a == 1) ? fstr("") : (a == -1) ? fstr("-") : fstr("%d", a);
     char *b_str = (abs(b) == 1) ? fstr("") : fstr("%d", abs(b));
@@ -93,7 +95,8 @@ static void append_result(char *str) {
 
 static void solve_lde_ab0(const int c, const Interval xi, const Interval yi) {
     if (c != 0) {
-        append_result(fstr("Since a = 0, b = 0, and c ≠ 0, the LDE has no solution.\n"));
+        append_result(
+            fstr("Since a = 0, b = 0, and c ≠ 0, the LDE has no solution.\n"));
         return;
     }
 
@@ -106,7 +109,8 @@ static void solve_lde_ab0(const int c, const Interval xi, const Interval yi) {
     free(yi_str);
 }
 
-static void solve_lde_a0(const int b, const int c, const Interval xi, const Interval yi) {
+static void solve_lde_a0(const int b, const int c, const Interval xi,
+                         const Interval yi) {
     if (c % b != 0) {
         append_result(fstr("Since %d does not divide %d, ", b, c));
         append_result(fstr("the LDE has no integer solution.\n"));
@@ -122,13 +126,15 @@ static void solve_lde_a0(const int b, const int c, const Interval xi, const Inte
 
     if (!is_in_interval(y, yi)) {
         char *yi_str = interval_to_str(yi);
-        append_result(fstr("However, %d is not in the interval %s\n", y, yi_str));
+        append_result(
+            fstr("However, %d is not in the interval %s\n", y, yi_str));
         append_result(fstr("Therefore, the LDE has no solution.\n"));
         free(yi_str);
     }
 }
 
-static void solve_lde_b0(const int a, const int c, const Interval xi, const Interval yi) {
+static void solve_lde_b0(const int a, const int c, const Interval xi,
+                         const Interval yi) {
     if (c % a != 0) {
         append_result(fstr("Since %d does not divide %d, ", a, c));
         append_result(fstr("the LDE has no integer solution.\n"));
@@ -140,7 +146,8 @@ static void solve_lde_b0(const int a, const int c, const Interval xi, const Inte
 
     if (!is_in_interval(x, xi)) {
         char *xi_str = interval_to_str(xi);
-        append_result(fstr("However, %d is not in the interval %s\n", x, xi_str));
+        append_result(
+            fstr("However, %d is not in the interval %s\n", x, xi_str));
         append_result(fstr("Therefore, the LDE has no solution.\n"));
         free(xi_str);
         return;
@@ -151,8 +158,8 @@ static void solve_lde_b0(const int a, const int c, const Interval xi, const Inte
     free(yi_str);
 }
 
-static void solve_lde_in(const int a, const int b, const int c, const Interval xi,
-                         const Interval yi) {
+static void solve_lde_in(const int a, const int b, const int c,
+                         const Interval xi, const Interval yi) {
     EEA_Table *table = eea_table(a, b);
     const int d = eea_gcd_table(table);
 
@@ -199,7 +206,8 @@ static void solve_lde_in(const int a, const int b, const int c, const Interval x
     free(x_eq);
     free(y_eq);
 
-    const Interval n_intvl = int_interval(solve_ineq_sys(x0, b / d, y0, -a / d, xi, yi));
+    const Interval n_intvl =
+        int_interval(solve_ineq_sys(x0, b / d, y0, -a / d, xi, yi));
     if (is_valid_interval(n_intvl)) {
         char *n_intvl_str = interval_to_str(n_intvl);
         append_result(fstr("Where:\n\tn ∈ %s\n", n_intvl_str));
@@ -207,7 +215,8 @@ static void solve_lde_in(const int a, const int b, const int c, const Interval x
     } else {
         char *xi_str = interval_to_str(xi);
         char *yi_str = interval_to_str(yi);
-        append_result(fstr("\nHowever, there does not exist an integer n such that:\n"));
+        append_result(
+            fstr("\nHowever, there does not exist an integer n such that:\n"));
         append_result(fstr("\tx ∈ %s\n", xi_str));
         append_result(fstr("\ty ∈ %s\n", yi_str));
         append_result(fstr("Therefore, the LDE has no solution.\n"));

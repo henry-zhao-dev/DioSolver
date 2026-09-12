@@ -7,8 +7,8 @@ static bool is_int(const long double num) {
     return isfinite(num) && truncl(num) == num;
 }
 
-Interval make_interval(const double low, const double high, const bool left_open,
-                       const bool right_open) {
+Interval make_interval(const double low, const double high,
+                       const bool left_open, const bool right_open) {
     return (Interval){
         .low = low,
         .high = high,
@@ -19,8 +19,9 @@ Interval make_interval(const double low, const double high, const bool left_open
 }
 
 bool equal_interval(const Interval i1, const Interval i2) {
-    return i1.low == i2.low && i1.high == i2.high && i1.left_open == i2.left_open &&
-           i1.right_open == i2.right_open && i1.valid == i2.valid;
+    return i1.low == i2.low && i1.high == i2.high &&
+           i1.left_open == i2.left_open && i1.right_open == i2.right_open &&
+           i1.valid == i2.valid;
 }
 
 char *interval_to_str(const Interval intvl) {
@@ -40,12 +41,14 @@ char *interval_to_str(const Interval intvl) {
 bool is_valid_interval(const Interval intvl) {
     return intvl.valid && (intvl.low != NEG_INF || intvl.left_open) &&
            (intvl.high != POS_INF || intvl.right_open) &&
-           ((!intvl.left_open && !intvl.right_open && intvl.low <= intvl.high) ||
+           ((!intvl.left_open && !intvl.right_open &&
+             intvl.low <= intvl.high) ||
             (intvl.low < intvl.high));
 }
 
 bool is_in_interval(const double n, const Interval intvl) {
-    return intvl.valid && (intvl.left_open ? (n > intvl.low) : (n >= intvl.low)) &&
+    return intvl.valid &&
+           (intvl.left_open ? (n > intvl.low) : (n >= intvl.low)) &&
            (intvl.right_open ? (n < intvl.high) : (n <= intvl.high));
 }
 
@@ -98,7 +101,8 @@ Interval int_interval(const Interval intvl) {
         high = floor(intvl.high);
     }
 
-    return make_interval(low, high, intvl.low == NEG_INF, intvl.high == POS_INF);
+    return make_interval(low, high, intvl.low == NEG_INF,
+                         intvl.high == POS_INF);
 }
 
 int num_int_in(const Interval intvl) {

@@ -40,7 +40,8 @@ static void test_eea_lde(void) {
 
     EEA_Table *table = eea_table(lde.a, lde.b);
     assert_solution_for_lde(lde, eea_lde_table(lde, table));
-    assert_solution_for_lde(lde, eea_lde_row(lde, eea_2nd_last_row(lde.a, lde.b)));
+    assert_solution_for_lde(lde,
+                            eea_lde_row(lde, eea_2nd_last_row(lde.a, lde.b)));
     calist_destroy(table);
 
     lde = make_lde(6, 4, 5);

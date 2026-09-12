@@ -62,8 +62,10 @@ static void test_is_valid_interval(void) {
     assert(!is_valid_interval(make_interval(10, 5, false, false))); // [10,5]
 
     // Closed interval around infinity
-    assert(!is_valid_interval(make_interval(NEG_INF, 0, false, false))); // [-inf,0]
-    assert(!is_valid_interval(make_interval(0, POS_INF, true, false)));  // (0,inf]
+    assert(!is_valid_interval(
+        make_interval(NEG_INF, 0, false, false))); // [-inf,0]
+    assert(
+        !is_valid_interval(make_interval(0, POS_INF, true, false))); // (0,inf]
 }
 
 static void test_is_in_interval(void) {
@@ -78,67 +80,73 @@ static void test_is_in_interval(void) {
 }
 
 static void test_intersection(void) {
-    assert(equal_interval(intersection(make_interval(137.0 / 5, POS_INF, true, true),
-                                       make_interval(NEG_INF, 274.0 / 9, true, true)),
-                          make_interval(137.0 / 5, 274.0 / 9, true, true)));
+    assert(equal_interval(
+        intersection(make_interval(137.0 / 5, POS_INF, true, true),
+                     make_interval(NEG_INF, 274.0 / 9, true, true)),
+        make_interval(137.0 / 5, 274.0 / 9, true, true)));
 
-    assert(equal_interval(intersection(make_interval(-137.0 / 5, POS_INF, true, true),
-                                       make_interval(-274.0 / 9, POS_INF, true, true)),
-                          make_interval(-137.0 / 5, POS_INF, true, true)));
+    assert(equal_interval(
+        intersection(make_interval(-137.0 / 5, POS_INF, true, true),
+                     make_interval(-274.0 / 9, POS_INF, true, true)),
+        make_interval(-137.0 / 5, POS_INF, true, true)));
 
-    assert(equal_interval(intersection(make_interval(NEG_INF, -137.0 / 5, true, true),
-                                       make_interval(NEG_INF, -274.0 / 9, true, true)),
-                          make_interval(NEG_INF, -274.0 / 9, true, true)));
+    assert(equal_interval(
+        intersection(make_interval(NEG_INF, -137.0 / 5, true, true),
+                     make_interval(NEG_INF, -274.0 / 9, true, true)),
+        make_interval(NEG_INF, -274.0 / 9, true, true)));
 
-    assert(equal_interval(intersection(make_interval(NEG_INF, 137.0 / 5, true, true),
-                                       make_interval(274.0 / 9, POS_INF, true, true)),
+    assert(equal_interval(
+        intersection(make_interval(NEG_INF, 137.0 / 5, true, true),
+                     make_interval(274.0 / 9, POS_INF, true, true)),
+        INVALID_INTVL));
+
+    assert(equal_interval(intersection(make_interval(3, 4, true, true),
+                                       make_interval(3, 5, false, false)),
+                          make_interval(3, 4, true, true)));
+
+    assert(equal_interval(intersection(make_interval(3, 4, false, false),
+                                       make_interval(3, 5, true, false)),
+                          make_interval(3, 4, true, false)));
+
+    assert(equal_interval(intersection(make_interval(3, 4, false, true),
+                                       make_interval(3, 5, false, false)),
+                          make_interval(3, 4, false, true)));
+
+    assert(equal_interval(intersection(make_interval(5, 7, false, true),
+                                       make_interval(6, 7, true, true)),
+                          make_interval(6, 7, true, true)));
+
+    assert(equal_interval(intersection(make_interval(5, 7, true, false),
+                                       make_interval(6, 7, false, false)),
+                          make_interval(6, 7, false, false)));
+
+    assert(equal_interval(intersection(make_interval(5, 7, true, true),
+                                       make_interval(6, 7, false, true)),
+                          make_interval(6, 7, false, true)));
+
+    assert(equal_interval(intersection(make_interval(5, 5, false, false),
+                                       make_interval(5, 5, false, false)),
+                          make_interval(5, 5, false, false)));
+
+    assert(equal_interval(intersection(make_interval(7, 5, true, true),
+                                       make_interval(6, 6, false, false)),
+                          INVALID_INTVL));
+
+    assert(equal_interval(intersection(make_interval(5, 5, true, false),
+                                       make_interval(5, 5, false, true)),
+                          INVALID_INTVL));
+
+    assert(equal_interval(intersection(make_interval(5, 5, false, false),
+                                       make_interval(5, 5, true, true)),
                           INVALID_INTVL));
 
     assert(equal_interval(
-        intersection(make_interval(3, 4, true, true), make_interval(3, 5, false, false)),
-        make_interval(3, 4, true, true)));
-
-    assert(equal_interval(
-        intersection(make_interval(3, 4, false, false), make_interval(3, 5, true, false)),
-        make_interval(3, 4, true, false)));
-
-    assert(equal_interval(
-        intersection(make_interval(3, 4, false, true), make_interval(3, 5, false, false)),
-        make_interval(3, 4, false, true)));
-
-    assert(equal_interval(
-        intersection(make_interval(5, 7, false, true), make_interval(6, 7, true, true)),
-        make_interval(6, 7, true, true)));
-
-    assert(equal_interval(
-        intersection(make_interval(5, 7, true, false), make_interval(6, 7, false, false)),
-        make_interval(6, 7, false, false)));
-
-    assert(equal_interval(
-        intersection(make_interval(5, 7, true, true), make_interval(6, 7, false, true)),
-        make_interval(6, 7, false, true)));
-
-    assert(equal_interval(
-        intersection(make_interval(5, 5, false, false), make_interval(5, 5, false, false)),
-        make_interval(5, 5, false, false)));
-
-    assert(equal_interval(
-        intersection(make_interval(7, 5, true, true), make_interval(6, 6, false, false)),
+        intersection(INVALID_INTVL, make_interval(8, 11, true, false)),
         INVALID_INTVL));
 
     assert(equal_interval(
-        intersection(make_interval(5, 5, true, false), make_interval(5, 5, false, true)),
+        intersection(make_interval(1, 2, true, true), INVALID_INTVL),
         INVALID_INTVL));
-
-    assert(equal_interval(
-        intersection(make_interval(5, 5, false, false), make_interval(5, 5, true, true)),
-        INVALID_INTVL));
-
-    assert(equal_interval(intersection(INVALID_INTVL, make_interval(8, 11, true, false)),
-                          INVALID_INTVL));
-
-    assert(equal_interval(intersection(make_interval(1, 2, true, true), INVALID_INTVL),
-                          INVALID_INTVL));
 }
 
 static void test_int_interval(void) {
@@ -148,17 +156,21 @@ static void test_int_interval(void) {
     assert(equal_interval(int_interval(make_interval(-2.1, 5.1, true, true)),
                           make_interval(-2, 5, false, false)));
 
-    assert(equal_interval(int_interval(make_interval(137.0 / 5, 274.0 / 9, true, true)),
-                          make_interval(28, 30, false, false)));
+    assert(equal_interval(
+        int_interval(make_interval(137.0 / 5, 274.0 / 9, true, true)),
+        make_interval(28, 30, false, false)));
 
-    assert(equal_interval(int_interval(make_interval(137.0 / 5, -274.0 / 9, true, true)),
-                          INVALID_INTVL));
+    assert(equal_interval(
+        int_interval(make_interval(137.0 / 5, -274.0 / 9, true, true)),
+        INVALID_INTVL));
 
-    assert(equal_interval(int_interval(make_interval(-137.0 / 5, 274.0 / 9, true, true)),
-                          make_interval(-27, 30, false, false)));
+    assert(equal_interval(
+        int_interval(make_interval(-137.0 / 5, 274.0 / 9, true, true)),
+        make_interval(-27, 30, false, false)));
 
-    assert(equal_interval(int_interval(make_interval(-274.0 / 9, -137.0 / 5, true, true)),
-                          make_interval(-30, -28, false, false)));
+    assert(equal_interval(
+        int_interval(make_interval(-274.0 / 9, -137.0 / 5, true, true)),
+        make_interval(-30, -28, false, false)));
 
     assert(equal_interval(int_interval(make_interval(27, 31, true, true)),
                           make_interval(28, 30, false, false)));
@@ -172,7 +184,8 @@ static void test_int_interval(void) {
     assert(equal_interval(int_interval(make_interval(27, 31, false, false)),
                           make_interval(27, 31, false, false)));
 
-    assert(equal_interval(int_interval(make_interval(5, 5, true, true)), INVALID_INTVL));
+    assert(equal_interval(int_interval(make_interval(5, 5, true, true)),
+                          INVALID_INTVL));
 
     assert(equal_interval(int_interval(make_interval(5, 5, false, false)),
                           make_interval(5, 5, false, false)));

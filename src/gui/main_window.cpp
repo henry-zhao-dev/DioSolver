@@ -105,9 +105,10 @@ Interval LDEFrame::yInterval() {
     return yBox->interval();
 }
 
-DomainBox::DomainBox(const QString &title, LDEFrame *frame) : QGroupBox(title, frame) {
-    static const QStringList defined_intvls = {"Real",        "Positive",    "Negative",
-                                               "Nonpositive", "Nonnegative", "Custom"};
+DomainBox::DomainBox(const QString &title, LDEFrame *frame)
+    : QGroupBox(title, frame) {
+    static const QStringList defined_intvls = {
+        "Real", "Positive", "Negative", "Nonpositive", "Nonnegative", "Custom"};
 
     QVBoxLayout *vboxLayout = new QVBoxLayout(this);
     vboxLayout->setSpacing(5);
