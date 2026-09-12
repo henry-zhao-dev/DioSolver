@@ -81,6 +81,24 @@ To build just the GUI target after configuring the project:
 cmake --build build --target gui
 ```
 
+## Format the code
+
+DioSolver uses `clang-format` for its C and C++ source files. The formatter
+configuration is checked in at `.clang-format`, and the CMake targets cover
+the project-owned files under `include/`, `src/`, and `tests/`.
+
+After configuring the project, format the sources with:
+
+```sh
+cmake --build build --target format
+```
+
+Check formatting without changing files with:
+
+```sh
+cmake --build build --target format-check
+```
+
 To build the core and CLI without installing or configuring Qt:
 
 ```sh
