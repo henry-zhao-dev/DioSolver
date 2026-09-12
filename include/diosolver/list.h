@@ -29,8 +29,15 @@ extern "C" {
 
 /** Appends an element to the list. */
 #define list_append(lst, x, type) \
-    lst.arr = (type*) realloc(lst.arr, (lst.size + 1) * sizeof(type)); \
-    ((type*) lst.arr)[lst.size++] = x
+    do { \
+        type *new_arr = (type*) realloc( \
+            (lst).arr, ((lst).size + 1) * sizeof(type)); \
+        if (new_arr == NULL) { \
+            abort(); \
+        } \
+        (lst).arr = new_arr; \
+        new_arr[(lst).size++] = (x); \
+    } while (0)
 
 /** Free a list from the memory. */
 #define list_free(lst) \
