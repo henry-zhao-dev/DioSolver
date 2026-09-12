@@ -1,12 +1,11 @@
-w#include <diosolver/extended_euclidean.h>
+#include <diosolver/extended_euclidean.h>
 
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 static void test_eea_table(void) {
-    EEA_Table table;
-    table = eea_table(0, 5);
+    EEA_Table table = eea_table(0, 5);
     assert(equal_eea_table(table,
         make_list((EEAR[]) {
             make_eear(1, 0, 5, 0),
@@ -105,8 +104,7 @@ static void test_eea_gcd(void) {
     assert(eea_gcd(1386, 322) == 14);
     assert(eea_gcd(-2172, 423) == 3);
 
-    EEA_Table table;
-    table = eea_table(1386, 322);
+    EEA_Table table = eea_table(1386, 322);
     assert(eea_gcd_table(table) == 14);
     list_free(table);
 

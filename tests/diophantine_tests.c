@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 static void test_make_solution(void) {
-    Solution solution = make_solution(13, -37);
+    const Solution solution = make_solution(13, -37);
 
     assert(solution.x == 13);
     assert(solution.y == -37);

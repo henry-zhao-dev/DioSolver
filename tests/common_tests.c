@@ -16,8 +16,7 @@ static void test_common(void) {
     assert(!equal_str("abc", "abC"));
     assert(!equal_str("ab c", "abc d"));
 
-    char *str;
-    str = fstr("%d + %d = %d", 1, 2, 3);
+    char *str = fstr("%d + %d = %d", 1, 2, 3);
     assert(equal_str(str, "1 + 2 = 3"));
     free(str);
 

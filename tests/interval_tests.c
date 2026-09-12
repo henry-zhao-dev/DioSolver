@@ -6,8 +6,7 @@
 #include <stdlib.h>
 
 static void test_interval_to_str(void) {
-    char *intvl_str;
-    intvl_str = interval_to_str(make_interval(3, 5, true, true));
+    char *intvl_str = interval_to_str(make_interval(3, 5, true, true));
     assert(equal_str(intvl_str, "(3,5)"));
     free(intvl_str);
 
