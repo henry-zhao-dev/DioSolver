@@ -97,11 +97,6 @@ int eea_gcd_table(EEA_Table table);
  */
 int eea_gcd_row(EEAR row);
 
-/**
- * Runs unit tests for functions in "extended_euclidean.h".
- */
-void test_extended_euclidean(void);
-
 #ifdef __cplusplus
 }
 #endif
