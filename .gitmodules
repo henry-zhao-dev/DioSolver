@@ -1,0 +1,3 @@
+[submodule "external/c-storage-kit"]
+	path = external/c-storage-kit
+	url = https://github.com/henry-zhao-dev/c-storage-kit.git

@@ -1,4 +1,4 @@
-#include <diosolver/common.h>
+#include <diosolver/string_utils.h>
 #include <diosolver/interval.h>
 
 #include <assert.h>
@@ -177,6 +177,14 @@ static void test_intersection(void) {
 }
 
 static void test_int_interval(void) {
+    assert(equal_interval(
+        int_interval(make_interval(2.0, 5.0, true, true)),
+        make_interval(3, 4, false, false)));
+
+    assert(equal_interval(
+        int_interval(make_interval(-2.1, 5.1, true, true)),
+        make_interval(-2, 5, false, false)));
+
     assert(equal_interval(
         int_interval(make_interval(137.0 / 5, 274.0 / 9, true, true)),
         make_interval(28, 30, false, false)));

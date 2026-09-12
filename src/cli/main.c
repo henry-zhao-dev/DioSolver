@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <ctype.h>
+#include <stdlib.h>
 
 void clear_screen(void) {
 #if defined(_WIN32)
@@ -82,13 +83,12 @@ Interval select_domain(char var) {
 }
 
 void solve_lde(int a, int b, int c, Interval xi, Interval yi) {
-    List result = lde_result(make_lde_in(a, b, c, xi, yi));
-    for (int i = 0; i < result.size; ++i) {
-        char *line = list_at(result, i, char*);
+    calist *result = lde_result(make_lde_in(a, b, c, xi, yi));
+    for (size_t i = 0; i < calist_size(result); ++i) {
+        const char *line = (const char *) calist_get(result, i);
         printf("%s", line);
-        free(line);
     }
-    list_free(result);
+    calist_destroy(result);
 }
 
 

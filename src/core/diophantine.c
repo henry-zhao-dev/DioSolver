@@ -1,43 +1,50 @@
 #include <diosolver/diophantine.h>
 #include <diosolver/inequality.h>
-#include <diosolver/common.h>
+#include <diosolver/string_utils.h>
 
-Solution make_solution(int x, int y) {
-    return (Solution) {x, y, true};
+#include <stdlib.h>
+
+Solution make_solution(const int x, const int y) {
+    return (Solution) {.x = x, .y = y, .exist = true};
 }
 
-LDE make_lde(int a, int b, int c) {
-    return (LDE) {a, b, c, REAL, REAL};
+LDE make_lde(const int a, const int b, const int c) {
+    return (LDE) {.a = a, .b = b, .c = c, .xi = REAL, .yi = REAL};
 }
 
-LDE make_lde_in(int a, int b, int c, Interval xi, Interval yi) {
-    return (LDE) {a, b, c, xi, yi};
+LDE make_lde_in(const int a, const int b, const int c,
+                const Interval xi, const Interval yi) {
+    return (LDE) {.a = a, .b = b, .c = c, .xi = xi, .yi = yi};
 }
 
-Solution eea_lde(LDE lde) {
+Solution eea_lde(const LDE lde) {
     return eea_lde_row(lde, eea_2nd_last_row(lde.a, lde.b));
 }
 
-Solution eea_lde_table(LDE lde, EEA_Table table) {
-    return eea_lde_row(lde, list_at(table, table.size - 2, EEAR));
+Solution eea_lde_table(const LDE lde, const EEA_Table *table) {
+    const size_t second_last = calist_size(table) - 2;
+    const EEAR row = *(const EEAR *) calist_get(table, second_last);
+    return eea_lde_row(lde, row);
 }
 
-Solution eea_lde_row(LDE lde, EEAR row) {
-    int a = lde.a;
-    int b = lde.b;
-    int c = lde.c;
+Solution eea_lde_row(const LDE lde, const EEAR row) {
+    const int a = lde.a;
+    const int b = lde.b;
+    const int c = lde.c;
+    const int abs_a = abs(a);
+    const int abs_b = abs(b);
 
-    int gcd_ab = eea_gcd_row(row);
+    const int gcd_ab = eea_gcd_row(row);
     if (c % gcd_ab != 0) {
         return NO_SOLN;
     }
 
-    int factor = c / gcd_ab;
-    int x = row.x * factor;
-    int y = row.y * factor;
+    const int factor = c / gcd_ab;
+    const int x = row.x * factor;
+    const int y = row.y * factor;
 
-    Solution soln = make_solution(abs(a) / a, abs(b) / b);
-    if (abs(a) > abs(b)) {
+    Solution soln = make_solution(abs_a / a, abs_b / b);
+    if (abs_a > abs_b) {
         soln.x *= x;
         soln.y *= y;
     } else {
@@ -47,19 +54,19 @@ Solution eea_lde_row(LDE lde, EEAR row) {
     return soln;
 }
 
-char *lde_to_str(int a, int b, int c) {
-    char *a_str = (a == 1) ? fstr("") : (a == -1) ? fstr("-") : fstr("%d", a); 
-    char op = (b < 0) ? '-' : '+';
+static char *lde_to_str(const int a, const int b, const int c) {
+    char *a_str = (a == 1) ? fstr("") : (a == -1) ? fstr("-") : fstr("%d", a);
+    const char op = (b < 0) ? '-' : '+';
     char *b_str = (abs(b) == 1) ? fstr("") : fstr("%d", abs(b));
-    char *lde_str = fstr("%sx %c %sy = %d", a_str, op, b_str, c);
+    char *lde_str = fstr("\t%sx %c %sy = %d\n", a_str, op, b_str, c);
     free(a_str);
     free(b_str);
     return lde_str;
 }
 
-char *lde_soln_to_str(int a, int b, int c, int x, int y) {
-    char *a_str = (a == 1) ? fstr("") : (a == -1) ? fstr("-") : fstr("%d", a); 
-    char op = (b < 0) ? '-' : '+';
+static char *lde_soln_to_str(const int a, const int b, const int c, const int x, const int y) {
+    const char op = (b < 0) ? '-' : '+';
+    char *a_str = (a == 1) ? fstr("") : (a == -1) ? fstr("-") : fstr("%d", a);
     char *b_str = (abs(b) == 1) ? fstr("") : fstr("%d", abs(b));
     char *lde_str = fstr("%s(%d) %c %s(%d) = %d", a_str, x, op, b_str, y, c);
     free(a_str);
@@ -67,24 +74,26 @@ char *lde_soln_to_str(int a, int b, int c, int x, int y) {
     return lde_str;
 }
 
-char *n_eq_to_str(int a, int b) {
+static char *n_eq_to_str(const int a, const int b) {
     if (a == 0) {
         return (b == 1) ? fstr("n") : (b == -1) ? fstr("-n") : fstr("%dn", b);
     }
 
-    char op = (b < 0) ? '-' : '+';
+    const char op = (b < 0) ? '-' : '+';
     char *b_str = (abs(b) == 1) ? fstr("n") : fstr("%dn", abs(b));
     char *eq_str = fstr("%d %c %s", a, op, b_str);
     free(b_str);
     return eq_str;
 }
 
-List result;
-void append_result(char *str) {
-    list_append(result, str, char*);
+static calist *result;
+
+static void append_result(char *str) {
+    calist_append(result, str);
+    free(str);
 }
 
-void solve_lde_ab0(int c, Interval xi, Interval yi) {
+static void solve_lde_ab0(const int c, const Interval xi, const Interval yi) {
     if (c != 0) {
         append_result(fstr("Since a = 0, b = 0, and c ≠ 0, the LDE has no solution.\n"));
         return;
@@ -99,7 +108,7 @@ void solve_lde_ab0(int c, Interval xi, Interval yi) {
     free(yi_str);
 }
 
-void solve_lde_a0(int b, int c, Interval xi, Interval yi) {
+static void solve_lde_a0(const int b, const int c, const Interval xi, const Interval yi) {
     if (c % b != 0) {
         append_result(fstr("Since %d does not divide %d, ", b, c));
         append_result(fstr("the LDE has no integer solution.\n"));
@@ -110,9 +119,9 @@ void solve_lde_a0(int b, int c, Interval xi, Interval yi) {
     append_result(fstr("x is any integer in the interval %s\n", xi_str));
     free(xi_str);
 
-    int y = c / b;
+    const int y = c / b;
     append_result(fstr("y = %d\n", y));
-    
+
     if (!is_in_interval(y, yi)) {
         char *yi_str = interval_to_str(yi);
         append_result(fstr("However, %d is not in the interval %s\n", y, yi_str));
@@ -121,16 +130,16 @@ void solve_lde_a0(int b, int c, Interval xi, Interval yi) {
     }
 }
 
-void solve_lde_b0(int a, int c, Interval xi, Interval yi) {
+static void solve_lde_b0(const int a, const int c, const Interval xi, const Interval yi) {
     if (c % a != 0) {
         append_result(fstr("Since %d does not divide %d, ", a, c));
         append_result(fstr("the LDE has no integer solution.\n"));
         return;
     }
 
-    int x = c / a;
+    const int x = c / a;
     append_result(fstr("x = %d\n", x));
-    
+
     if (!is_in_interval(x, xi)) {
         char *xi_str = interval_to_str(xi);
         append_result(fstr("However, %d is not in the interval %s\n", x, xi_str));
@@ -144,14 +153,17 @@ void solve_lde_b0(int a, int c, Interval xi, Interval yi) {
     free(yi_str);
 }
 
-void solve_lde_in(int a, int b, int c, Interval xi, Interval yi) {
-    EEA_Table table = eea_table(a, b);
-    int d = eea_gcd_table(table);
+static void solve_lde_in(
+    const int a, const int b, const int c,
+    const Interval xi, const Interval yi)
+{
+    EEA_Table *table = eea_table(a, b);
+    const int d = eea_gcd_table(table);
 
     append_result(fstr("By the Extended Euclidean Algorithm (EEA):\n"));
     append_result(fstr("x\ty\tr\tq\n"));
-    for (int i = 0; i < table.size; ++i) {
-        EEAR eear = list_at(table, i, EEAR);
+    for (size_t i = 0; i < calist_size(table); ++i) {
+        const EEAR eear = *(const EEAR *) calist_get(table, i);
         append_result(fstr("%d\t%d\t%d\t%d\n", eear.x, eear.y, eear.r, eear.q));
     }
 
@@ -159,27 +171,25 @@ void solve_lde_in(int a, int b, int c, Interval xi, Interval yi) {
     if (c % d != 0) {
         append_result(fstr("Since %d does not divide %d, ", d, c));
         append_result(fstr("the LDE has no solution.\n"));
-        list_free(table);
+        calist_destroy(table);
         return;
     }
 
-    Solution part_soln;
-    char *soln_str;
-    
-    part_soln = eea_lde_table(make_lde(a, b, d), table);
+    Solution part_soln = eea_lde_table(make_lde(a, b, d), table);
     append_result(fstr("From the EEA Table:\n"));
-    soln_str = lde_soln_to_str(a, b, d, part_soln.x, part_soln.y);
+
+    char *soln_str = lde_soln_to_str(a, b, d, part_soln.x, part_soln.y);
     append_result(fstr("\t%s\n", soln_str));
     free(soln_str);
 
     part_soln = eea_lde_table(make_lde(a, b, c), table);
-    int x0 = part_soln.x;
-    int y0 = part_soln.y;
+    const int x0 = part_soln.x;
+    const int y0 = part_soln.y;
     append_result(fstr("Thus:\n"));
     soln_str = lde_soln_to_str(a, b, c, x0, y0);
     append_result(fstr("\t%s\n\n", soln_str));
     free(soln_str);
-    list_free(table);
+    calist_destroy(table);
 
     append_result(fstr("A particular solution is:\n"));
     append_result(fstr("\tx₀ = %d\n", x0));
@@ -192,8 +202,9 @@ void solve_lde_in(int a, int b, int c, Interval xi, Interval yi) {
     append_result(fstr("\ty = %s\n", y_eq));
     free(x_eq);
     free(y_eq);
-    
-    Interval n_intvl = int_interval(solve_ineq_sys(x0, b/d, y0, -a/d, xi, yi));
+
+    const Interval n_intvl = int_interval(
+        solve_ineq_sys(x0, b / d, y0, -a / d, xi, yi));
     if (is_valid_interval(n_intvl)) {
         char *n_intvl_str = interval_to_str(n_intvl);
         append_result(fstr("Where:\n\tn ∈ %s\n", n_intvl_str));
@@ -210,16 +221,16 @@ void solve_lde_in(int a, int b, int c, Interval xi, Interval yi) {
     }
 }
 
-List lde_result(LDE lde) {
-    int a = lde.a;
-    int b = lde.b;
-    int c = lde.c;
-    Interval xi = lde.xi;
-    Interval yi = lde.yi;
+calist *lde_result(const LDE lde) {
+    const int a = lde.a;
+    const int b = lde.b;
+    const int c = lde.c;
+    const Interval xi = lde.xi;
+    const Interval yi = lde.yi;
 
-    result = list_init_empty();
+    result = calist_create(ctype_string());
     append_result(fstr("Solving the Linear Diophantine Equation (LDE):\n"));
-    append_result(fstr("\t%s\n", lde_to_str(a, b, c)));
+    append_result(lde_to_str(a, b, c));
     append_result(fstr("Where:\n"));
     char *xi_str = interval_to_str(xi);
     char *yi_str = interval_to_str(yi);
