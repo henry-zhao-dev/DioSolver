@@ -1,5 +1,82 @@
-.DS_Store
-build
+# C and C++ build artifacts
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+*.exe
+*.out
+*.d
+*.gch
+*.pch
+*.pdb
+*.ilk
+*.dSYM/
+
+# CMake and generated build directories
+build/
+out/
 cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+install_manifest.txt
 compile_commands.json
+CTestTestfile.cmake
+CTestCostData.txt
+Makefile
+CMakeUserPresets.json
+*.ninja
+
+# Qt and qmake user files
 *.pro.user
+*.pro.user.*
+*.qbs.user
+*.qbs.user.*
+*.qmlproject.user
+*.qmlproject.user.*
+.qmake.stash
+
+# Tests, coverage, and generated diagnostics
+*.gcda
+*.gcno
+*.gcov
+coverage/
+lcov.info
+*.log
+
+# IDEs and editors
+.idea/
+.vscode/
+.fleet/
+.vs/
+*.code-workspace
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.VC.db
+*.VC.VC.opendb
+*.swp
+*.swo
+*~
+
+# Operating systems
+.DS_Store
+._*
+Thumbs.db
+desktop.ini
+
+# Environment variables and local secrets
+.env
+.env.*
+!.env.example
+!.env.template
+*.key
+*.pem
+
+# Runtime data and temporary output
+tmp/
+temp/
