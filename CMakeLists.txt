@@ -20,7 +20,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(DIOSOLVER_CORE_SOURCES
-    src/core/common.c
+    src/core/string_utils.c
     src/core/diophantine.c
     src/core/extended_euclidean.c
     src/core/inequality.c
@@ -66,7 +66,7 @@ if(DIOSOLVER_BUILD_TESTS)
         add_test(NAME diosolver.${module} COMMAND ${target})
     endfunction()
 
-    diosolver_add_core_test(common)
+    diosolver_add_core_test(string_utils)
     diosolver_add_core_test(list)
     diosolver_add_core_test(extended_euclidean)
     diosolver_add_core_test(interval)

@@ -1,5 +1,5 @@
 #include <diosolver/extended_euclidean.h>
-#include <diosolver/common.h>
+#include <diosolver/string_utils.h>
 
 #include <stdio.h>
 #include <stdlib.h>

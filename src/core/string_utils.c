@@ -1,14 +1,10 @@
-#include <diosolver/common.h>
+#include <diosolver/string_utils.h>
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
 #include <math.h>
 #include <string.h>
-
-bool is_int(long double num) {
-    return roundf(num) == (float) num;
-}
 
 bool equal_str(const char *s1, const char *s2) {
     return !strcmp(s1, s2);

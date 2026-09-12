@@ -1,9 +1,13 @@
 #include <diosolver/interval.h>
-#include <diosolver/common.h>
+#include <diosolver/string_utils.h>
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+
+static bool is_int(const long double num) {
+    return isfinite(num) && truncl(num) == num;
+}
 
 Interval make_interval(double low, double high, bool left_open, bool right_open) {
     return (Interval) {low, high, left_open, right_open, true};

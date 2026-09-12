@@ -1,6 +1,6 @@
 #include <diosolver/diophantine.h>
 #include <diosolver/inequality.h>
-#include <diosolver/common.h>
+#include <diosolver/string_utils.h>
 
 Solution make_solution(int x, int y) {
     return (Solution) {x, y, true};
