@@ -22,7 +22,7 @@ extern "C" {
 #define POS_INF INT_MAX
 
 /** Sentinel value used as the negative-infinity bound. */
-#define NEG_INF -POS_INF
+#define NEG_INF (- POS_INF)
 
 /** The unbounded interval `(-inf, inf)`. */
 #define REAL (Interval) {NEG_INF, POS_INF, true, true, true}

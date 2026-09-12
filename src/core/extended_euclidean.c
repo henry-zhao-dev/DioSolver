@@ -2,7 +2,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 
 static void *dup_eear(const void *item) {
     EEAR *copy = malloc(sizeof(*copy));
@@ -53,30 +52,38 @@ static const ctype *eear_ctype(void) {
     return eear_ctype_instance;
 }
 
-EEAR make_eear(int x, int y, int r, int q) {
-    return (EEAR) {x, y, r, q};
+static int max_int(int a, int b) {
+    return a > b ? a : b;
 }
 
-bool equal_eear(EEAR r1, EEAR r2) {
+static int min_int(int a, int b) {
+    return a < b ? a : b;
+}
+
+EEAR make_eear(const int x, const int y, const int r, const int q) {
+    return (EEAR) {.x = x, .y = y, .r = r, .q = q};
+}
+
+bool equal_eear(const EEAR r1, const EEAR r2) {
     return r1.x == r2.x &&
            r1.y == r2.y &&
            r1.r == r2.r &&
            r1.q == r2.q;
 }
 
-EEA_Table *eea_table(int a, int b) {
-    EEAR r1 = make_eear(1, 0, fmax(abs(a), abs(b)), 0);
-    EEAR r2 = make_eear(0, 1, fmin(abs(a), abs(b)), 0);
+EEA_Table *eea_table(const int a, const int b) {
+    EEAR r1 = make_eear(1, 0, max_int(abs(a), abs(b)), 0);
+    EEAR r2 = make_eear(0, 1, min_int(abs(a), abs(b)), 0);
 
     EEA_Table *table = calist_create_size(eear_ctype(), 2);
     calist_append(table, &r1);
     calist_append(table, &r2);
     
     while (r2.r != 0) {
-        int q = r1.r / r2.r;
-        int r = r1.r % r2.r;
-        int x = r1.x - r2.x * q;
-        int y = r1.y - r2.y * q;
+        const int q = r1.r / r2.r;
+        const int r = r1.r % r2.r;
+        const int x = r1.x - r2.x * q;
+        const int y = r1.y - r2.y * q;
 
         r1 = r2;
         r2 = make_eear(x, y, r, q);
@@ -91,14 +98,14 @@ bool equal_eea_table(const EEA_Table *t1, const EEA_Table *t2) {
 }
 
 EEAR eea_2nd_last_row(int a, int b) {
-    EEAR r1 = make_eear(1, 0, fmax(abs(a), abs(b)), 0);
-    EEAR r2 = make_eear(0, 1, fmin(abs(a), abs(b)), 0);
+    EEAR r1 = make_eear(1, 0, max_int(abs(a), abs(b)), 0);
+    EEAR r2 = make_eear(0, 1, min_int(abs(a), abs(b)), 0);
 
     while (r2.r != 0) {
-        int q = r1.r / r2.r;
-        int r = r1.r % r2.r;
-        int x = r1.x - r2.x * q;
-        int y = r1.y - r2.y * q;
+        const int q = r1.r / r2.r;
+        const int r = r1.r % r2.r;
+        const int x = r1.x - r2.x * q;
+        const int y = r1.y - r2.y * q;
 
         r1 = r2;
         r2 = make_eear(x, y, r, q);
@@ -107,7 +114,7 @@ EEAR eea_2nd_last_row(int a, int b) {
     return r1;
 }
 
-int eea_gcd(int a, int b) {
+int eea_gcd(const int a, const int b) {
     return eea_gcd_row(eea_2nd_last_row(a, b));
 }
 
@@ -116,6 +123,6 @@ int eea_gcd_table(const EEA_Table *table) {
     return eea_gcd_row(*(const EEAR *) calist_get(table, second_last));
 }
 
-int eea_gcd_row(EEAR row) {
+int eea_gcd_row(const EEAR row) {
     return row.r;
 }
