@@ -42,9 +42,8 @@ Interval DomainBox::interval() const {
     case 4:
         return NONNEGATIVE_INTERVAL;
     default:
-        return INVALID_INTERVAL;
+        return intervalFrame->customInterval();
     }
-    return intervalFrame->customInterval();
 }
 
 IntervalFrame::IntervalFrame(DomainBox *domainBox)
