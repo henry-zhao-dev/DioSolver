@@ -1,13 +1,13 @@
 #include "dialog.h"
-#include "main_window.h"
-#include <diosolver/diophantine.h>
 
+#include "main_window.h"
+
+#include <QDesktopServices>
 #include <QLabel>
 #include <QTextBrowser>
 #include <QTextEdit>
-#include <QDesktopServices>
-
 #include <cstdlib>
+#include <diosolver/diophantine.h>
 
 Dialog::Dialog(MainWindow *win, const QString &title) : QDialog(win) {
     setWindowTitle(title);
@@ -29,7 +29,8 @@ AboutDialog::AboutDialog(MainWindow *win) : Dialog(win, "About DioSolver") {
     editor->setOpenExternalLinks(true);
     dialogLayout->insertWidget(0, editor);
 
-    editor->insertHtml("<b><span style='font-size: 16px'>LDE Solver</span></b><br>");
+    editor->insertHtml(
+        "<b><span style='font-size: 16px'>LDE Solver</span></b><br>");
     editor->append("Developed by: Henry Zhao\n");
 
     editor->append("Relevant Theorems:");

@@ -8,6 +8,49 @@ project(DioSolver
 
 include(GNUInstallDirs)
 
+set(DIOSOLVER_FORMAT_SOURCES
+    include/diosolver/diophantine.h
+    include/diosolver/extended_euclidean.h
+    include/diosolver/inequality.h
+    include/diosolver/interval.h
+    include/diosolver/string_utils.h
+    src/cli/main.c
+    src/core/diophantine.c
+    src/core/extended_euclidean.c
+    src/core/inequality.c
+    src/core/interval.c
+    src/core/string_utils.c
+    src/gui/dialog.cpp
+    src/gui/dialog.h
+    src/gui/main.cpp
+    src/gui/main_window.cpp
+    src/gui/main_window.h
+    tests/diophantine_tests.c
+    tests/extended_euclidean_tests.c
+    tests/inequality_tests.c
+    tests/interval_tests.c
+    tests/string_utils_tests.c
+)
+
+find_program(DIOSOLVER_CLANG_FORMAT clang-format)
+if(DIOSOLVER_CLANG_FORMAT)
+    add_custom_target(format
+        COMMAND ${DIOSOLVER_CLANG_FORMAT} -i --style=file ${DIOSOLVER_FORMAT_SOURCES}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        COMMENT "Formatting DioSolver C and C++ sources"
+        VERBATIM
+    )
+
+    add_custom_target(format-check
+        COMMAND ${DIOSOLVER_CLANG_FORMAT} --dry-run --Werror --style=file ${DIOSOLVER_FORMAT_SOURCES}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        COMMENT "Checking DioSolver C and C++ formatting"
+        VERBATIM
+    )
+else()
+    message(STATUS "clang-format not found; format and format-check targets are unavailable")
+endif()
+
 option(DIOSOLVER_BUILD_CLI "Build the command-line application" ON)
 option(DIOSOLVER_BUILD_GUI "Build the Qt Widgets application" ON)
 option(DIOSOLVER_BUILD_TESTS "Build the core test executables" ON)

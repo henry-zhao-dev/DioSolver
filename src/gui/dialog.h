@@ -1,7 +1,7 @@
 #pragma once
 
-#include <QDialog>
 #include <QBoxLayout>
+#include <QDialog>
 #include <QPushButton>
 
 class MainWindow;
@@ -11,10 +11,10 @@ struct LDE;
 class Dialog : public QDialog {
     Q_OBJECT
 
-public:
+  public:
     Dialog(MainWindow *win, const QString &title);
 
-protected:
+  protected:
     QVBoxLayout *dialogLayout;
     QPushButton *okButton;
 };
@@ -22,13 +22,13 @@ protected:
 class AboutDialog : public Dialog {
     Q_OBJECT
 
-public:
+  public:
     AboutDialog(MainWindow *win);
 };
 
 class ResultDialog : public Dialog {
     Q_OBJECT
 
-public:
+  public:
     ResultDialog(MainWindow *win, LDE lde);
 };

@@ -1,8 +1,8 @@
 #include "main_window.h"
 
 #include <QApplication>
-#include <QFontDatabase>
 #include <QFile>
+#include <QFontDatabase>
 
 void loadStyleSheet(const QString &filename) {
     QFile file(filename);

@@ -1,12 +1,11 @@
 #include <diosolver/extended_euclidean.h>
-
 #include <stdio.h>
 #include <stdlib.h>
 
 static void *dup_eear(const void *item) {
     EEAR *copy = malloc(sizeof(*copy));
     if (copy != NULL) {
-        *copy = *(const EEAR *) item;
+        *copy = *(const EEAR *)item;
     }
     return copy;
 }
@@ -45,8 +44,8 @@ static void destroy_eear_ctype(void) {
 
 static const ctype *eear_ctype(void) {
     if (eear_ctype_instance == NULL) {
-        eear_ctype_instance = ctype_create(
-            sizeof(EEAR), dup_eear, destroy_eear, print_eear, compare_eear);
+        eear_ctype_instance = ctype_create(sizeof(EEAR), dup_eear, destroy_eear,
+                                           print_eear, compare_eear);
         atexit(destroy_eear_ctype);
     }
     return eear_ctype_instance;
@@ -63,22 +62,17 @@ static int min_int(const int a, const int b) {
 static EEAR next_eear(const EEAR previous, const EEAR current) {
     const int quotient = previous.r / current.r;
 
-    return make_eear(
-        previous.x - current.x * quotient,
-        previous.y - current.y * quotient,
-        previous.r % current.r,
-        quotient);
+    return make_eear(previous.x - current.x * quotient,
+                     previous.y - current.y * quotient, previous.r % current.r,
+                     quotient);
 }
 
 EEAR make_eear(const int x, const int y, const int r, const int q) {
-    return (EEAR) {.x = x, .y = y, .r = r, .q = q};
+    return (EEAR){.x = x, .y = y, .r = r, .q = q};
 }
 
 bool equal_eear(const EEAR r1, const EEAR r2) {
-    return r1.x == r2.x &&
-           r1.y == r2.y &&
-           r1.r == r2.r &&
-           r1.q == r2.q;
+    return r1.x == r2.x && r1.y == r2.y && r1.r == r2.r && r1.q == r2.q;
 }
 
 EEA_Table *eea_table(const int a, const int b) {
@@ -126,7 +120,7 @@ int eea_gcd(const int a, const int b) {
 
 int eea_gcd_table(const EEA_Table *table) {
     const size_t second_last = calist_size(table) - 2;
-    return eea_gcd_row(*(const EEAR *) calist_get(table, second_last));
+    return eea_gcd_row(*(const EEAR *)calist_get(table, second_last));
 }
 
 int eea_gcd_row(const EEAR row) {

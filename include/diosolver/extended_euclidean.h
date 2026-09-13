@@ -13,7 +13,6 @@
 #define DIOSOLVER_EXTENDED_EUCLIDEAN_H
 
 #include <calist.h>
-
 #include <stdbool.h>
 
 #ifdef __cplusplus

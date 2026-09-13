@@ -1,12 +1,13 @@
 #include "main_window.h"
+
 #include "dialog.h"
-#include <diosolver/diophantine.h>
 
 #include <QGridLayout>
 #include <QIntValidator>
 #include <QLabel>
 #include <QPushButton>
 #include <QStringList>
+#include <diosolver/diophantine.h>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     setWindowTitle("DioSolver");
@@ -48,7 +49,7 @@ LDE MainWindow::solveLDE() {
     int c = ldeFrame->cValue();
     Interval xIntvl = ldeFrame->xInterval();
     Interval yIntvl = ldeFrame->yInterval();
-    return (LDE) {a, b, c, xIntvl, yIntvl};
+    return (LDE){a, b, c, xIntvl, yIntvl};
 }
 
 IntLineEdit::IntLineEdit(QWidget *parent) : QLineEdit(parent) {
@@ -106,8 +107,8 @@ Interval LDEFrame::yInterval() {
 
 DomainBox::DomainBox(const QString &title, LDEFrame *frame)
     : QGroupBox(title, frame) {
-    static const QStringList defined_intvls =
-        {"Real", "Positive", "Negative", "Nonpositive", "Nonnegative", "Custom"};
+    static const QStringList defined_intvls = {
+        "Real", "Positive", "Negative", "Nonpositive", "Nonnegative", "Custom"};
 
     QVBoxLayout *vboxLayout = new QVBoxLayout(this);
     vboxLayout->setSpacing(5);
@@ -121,7 +122,7 @@ DomainBox::DomainBox(const QString &title, LDEFrame *frame)
     intvlFrame->setVisible(false);
     vboxLayout->addWidget(intvlFrame);
 
-    connect(intvlBox, &QComboBox::currentIndexChanged, this, [this] (int index) {
+    connect(intvlBox, &QComboBox::currentIndexChanged, this, [this](int index) {
         static const int lastIndex = defined_intvls.size() - 1;
         intvlFrame->setVisible(index == lastIndex);
     });
