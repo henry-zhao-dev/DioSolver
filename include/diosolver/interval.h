@@ -164,4 +164,4 @@ int num_int_in(Interval intvl);
 }
 #endif
 
-#endif
+#endif // DIOSOLVER_INTERVAL_H

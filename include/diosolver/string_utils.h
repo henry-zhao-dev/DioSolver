@@ -3,8 +3,8 @@
  * @brief Utilities for comparing and formatting null-terminated strings.
  */
 
-#ifndef DIOSOLVER_COMMON_H
-#define DIOSOLVER_COMMON_H
+#ifndef DIOSOLVER_STRING_UTILS_H
+#define DIOSOLVER_STRING_UTILS_H
 
 #include <stdbool.h>
 
@@ -46,4 +46,4 @@ char *fstr(const char *format, ...);
 }
 #endif
 
-#endif
+#endif // DIOSOLVER_STRING_UTILS_H

@@ -82,4 +82,4 @@ Interval solve_ineq_sys(int x_con, int x_coeff, int y_con, int y_coeff,
 }
 #endif
 
-#endif
+#endif // DIOSOLVER_INEQUALITY_H

@@ -166,4 +166,4 @@ calist *lde_result(LDE lde);
 }
 #endif
 
-#endif
+#endif // DIOSOLVER_DIOPHANTINE_H

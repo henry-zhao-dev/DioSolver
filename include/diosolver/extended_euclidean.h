@@ -149,4 +149,4 @@ int eea_gcd_row(EEAR row);
 }
 #endif
 
-#endif
+#endif // DIOSOLVER_EXTENDED_EUCLIDEAN_H
