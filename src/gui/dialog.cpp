@@ -2,64 +2,57 @@
 
 #include "main_window.h"
 
+#include <QApplication>
 #include <QDesktopServices>
-#include <QLabel>
 #include <QTextBrowser>
 #include <QTextEdit>
-#include <cstdlib>
+#include <QUrl>
 #include <diosolver/diophantine.h>
 
-Dialog::Dialog(MainWindow *win, const QString &title) : QDialog(win) {
+Dialog::Dialog(MainWindow *win, const QString &title, bool modal)
+    : QDialog(win), dialogLayout(new QVBoxLayout(this)),
+      okButton(new QPushButton("OK", this)) {
+
     setWindowTitle(title);
+    setModal(modal);
     setAttribute(Qt::WA_DeleteOnClose);
 
-    dialogLayout = new QVBoxLayout(this);
-    dialogLayout->setContentsMargins(25, 25, 25, 25);
-
-    okButton = new QPushButton("OK", this);
     connect(okButton, &QPushButton::clicked, this, &Dialog::close);
     dialogLayout->addWidget(okButton, 0, Qt::AlignCenter);
 }
 
-AboutDialog::AboutDialog(MainWindow *win) : Dialog(win, "About DioSolver") {
-    setModal(true);
+AboutDialog::AboutDialog(MainWindow *win)
+    : Dialog(win, "About DioSolver", true) {
 
-    QTextBrowser *editor = new QTextBrowser(this);
-    editor->setMinimumSize(420, 400);
-    editor->setOpenExternalLinks(true);
+    auto *editor = new QTextBrowser(this);
+    editor->setLineWrapMode(QTextEdit::WidgetWidth);
+    editor->setOpenLinks(false);
+    editor->setSource(QUrl("qrc:/conf/about.html"));
+    connect(editor, &QTextBrowser::anchorClicked, this, [](const QUrl &url) {
+        if (url == QUrl("about:qt")) {
+            QApplication::aboutQt();
+        } else {
+            QDesktopServices::openUrl(url);
+        }
+    });
     dialogLayout->insertWidget(0, editor);
 
-    editor->insertHtml(
-        "<b><span style='font-size: 16px'>LDE Solver</span></b><br>");
-    editor->append("Developed by: Henry Zhao\n");
-
-    editor->append("Relevant Theorems:");
-    editor->append("  - Extended Euclidean Algorithm");
-    editor->append("  - Bézout's Lemma");
-    editor->append("  - Linear Diophantine Equation Theorem, Part 1");
-    editor->append("  - Linear Diophantine Equation Theorem, Part 2\n");
-
-    editor->append("Reference:");
-    editor->append("  Language and Proofs in Algebra: An Introduction");
-    editor->append("  Version 1.3");
-    editor->append("  © Faculty of Mathematics, University of Waterloo");
-    editor->append("  September 21, 2024\n\n");
-
-    editor->insertHtml("Built with <a href=www.qt.io>Qt 6.8.0</a>");
-    editor->insertHtml("<br><br>");
-    editor->insertHtml("Visit <a href=github.com/HenryZhao2020>My GitHub</a>");
+    resize(500, 500);
 }
 
-ResultDialog::ResultDialog(MainWindow *win, LDE lde) : Dialog(win, "Result") {
-    QTextEdit *editor = new QTextEdit(this);
+ResultDialog::ResultDialog(MainWindow *win, const LDE &lde)
+    : Dialog(win, "Result") {
+
+    auto *editor = new QTextBrowser(this);
     editor->setReadOnly(true);
-    editor->setMinimumSize(400, 400);
     dialogLayout->insertWidget(0, editor);
 
     calist *result = lde_result(lde);
     for (size_t i = 0; i < calist_size(result); ++i) {
-        const char *line = static_cast<const char *>(calist_get(result, i));
+        const auto line = static_cast<const char *>(calist_get(result, i));
         editor->insertPlainText(line);
     }
     calist_destroy(result);
+
+    resize(550, 650);
 }

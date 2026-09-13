@@ -4,9 +4,12 @@
 #include <QFile>
 #include <QFontDatabase>
 
-void loadStyleSheet(const QString &filename) {
+static void loadStyleSheet(const QString &filename) {
     QFile file(filename);
-    file.open(QFile::ReadOnly | QFile::Text);
+    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+        qWarning() << "Cannot load application stylesheet";
+        return;
+    }
     qApp->setStyleSheet(file.readAll());
     file.close();
 }
@@ -19,5 +22,5 @@ int main(int argc, char *argv[]) {
     MainWindow win;
     win.show();
 
-    return app.exec();
+    return QApplication::exec();
 }

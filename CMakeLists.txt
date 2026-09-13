@@ -8,28 +8,25 @@ project(DioSolver
 
 include(GNUInstallDirs)
 
-set(DIOSOLVER_FORMAT_SOURCES
-    include/diosolver/diophantine.h
-    include/diosolver/extended_euclidean.h
-    include/diosolver/inequality.h
-    include/diosolver/interval.h
-    include/diosolver/string_utils.h
-    src/cli/main.cpp
-    src/core/diophantine.c
-    src/core/extended_euclidean.c
-    src/core/inequality.c
-    src/core/interval.c
-    src/core/string_utils.c
-    src/gui/dialog.cpp
-    src/gui/dialog.h
-    src/gui/main.cpp
-    src/gui/main_window.cpp
-    src/gui/main_window.h
-    tests/diophantine_tests.c
-    tests/extended_euclidean_tests.c
-    tests/inequality_tests.c
-    tests/interval_tests.c
-    tests/string_utils_tests.c
+file(GLOB_RECURSE DIOSOLVER_FORMAT_SOURCES CONFIGURE_DEPENDS
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/*.[ch]"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/*.[ch]pp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/*.cc"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/*.cxx"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hh"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hxx"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.[ch]"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.[ch]pp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cc"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cxx"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hh"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hxx"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/*.[ch]"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/*.[ch]pp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/*.cc"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/*.cxx"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/*.hh"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/*.hxx"
 )
 
 find_program(DIOSOLVER_CLANG_FORMAT clang-format)
@@ -129,6 +126,10 @@ if(DIOSOLVER_BUILD_GUI)
         src/gui/main_window.cpp
         src/gui/main_window.h
         src/gui/resources/resources.qrc
+        src/gui/int_line_edit.cpp
+        src/gui/int_line_edit.h
+        src/gui/lde_frame.cpp
+        src/gui/lde_frame.h
     )
     add_executable(DioSolver::Gui ALIAS diosolver_gui)
 

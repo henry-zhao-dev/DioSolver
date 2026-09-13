@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/conf">
+        <file>about.html</file>
         <file>styles.qss</file>
     </qresource>
     <qresource prefix="/font">

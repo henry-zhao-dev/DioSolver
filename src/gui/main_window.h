@@ -1,97 +1,24 @@
-#pragma once
+#ifndef DIOSOLVER_MAIN_WINDOW_H
+#define DIOSOLVER_MAIN_WINDOW_H
 
 #include <QBoxLayout>
-#include <QCheckBox>
-#include <QComboBox>
-#include <QFrame>
-#include <QGroupBox>
-#include <QLineEdit>
 #include <QMainWindow>
 
-class LDEFrame;
-class DomainBox;
-class IntervalFrame;
-
-struct Interval;
 struct LDE;
+class LDEFrame;
 
-class MainWindow : public QMainWindow {
+class MainWindow : public QWidget {
     Q_OBJECT
 
   public:
-    MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = nullptr);
 
     void clearLDE();
-    LDE solveLDE();
+    [[nodiscard]] LDE getLDE() const;
 
   private:
     QVBoxLayout *mainLayout;
     LDEFrame *ldeFrame;
 };
 
-class IntLineEdit : public QLineEdit {
-    Q_OBJECT
-
-  public:
-    IntLineEdit(QWidget *parent = nullptr);
-
-    int value();
-};
-
-class LDEFrame : public QFrame {
-    Q_OBJECT
-
-  public:
-    LDEFrame(MainWindow *win);
-
-    int aValue();
-    int bValue();
-    int cValue();
-
-    Interval xInterval();
-    Interval yInterval();
-
-  private:
-    IntLineEdit *aField;
-    IntLineEdit *bField;
-    IntLineEdit *cField;
-
-    DomainBox *xBox;
-    DomainBox *yBox;
-};
-
-class DomainBox : public QGroupBox {
-    Q_OBJECT
-
-  public:
-    DomainBox(const QString &title, LDEFrame *frame);
-
-    Interval interval();
-
-  private:
-    QComboBox *intvlBox;
-    IntervalFrame *intvlFrame;
-};
-
-class IntervalFrame : public QFrame {
-    Q_OBJECT
-
-  public:
-    IntervalFrame(DomainBox *domainBox);
-
-    Interval customInterval();
-
-  private:
-    IntLineEdit *fromBox;
-    IntLineEdit *toBox;
-
-    QCheckBox *leftBox;
-    QCheckBox *rightBox;
-};
-
-class ButtonFrame : public QFrame {
-    Q_OBJECT
-
-  public:
-    ButtonFrame(MainWindow *win);
-};
+#endif // DIOSOLVER_MAIN_WINDOW_H
