@@ -6,10 +6,10 @@ Interval solve_ineq(const int con, const int coeff, const Op op,
     const bool open = (op == GREATER || op == LESS);
 
     if (target == POS_INF) {
-        return op_greater ? INVALID_INTVL : REAL;
+        return op_greater ? INVALID_INTERVAL : REAL_INTERVAL;
     }
     if (target == NEG_INF) {
-        return op_greater ? REAL : INVALID_INTVL;
+        return op_greater ? REAL_INTERVAL : INVALID_INTERVAL;
     }
 
     const double bound = (double)(target - con) / coeff;
@@ -23,7 +23,7 @@ Interval solve_ineq(const int con, const int coeff, const Op op,
 
 Interval solve_ineq_in(const int con, const int coeff, const Interval intvl) {
     if (!is_valid_interval(intvl)) {
-        return INVALID_INTVL;
+        return INVALID_INTERVAL;
     }
 
     const Interval intvl_greater = solve_ineq(

@@ -4,7 +4,7 @@
  *
  * The functions in this header operate on real-valued variables and return
  * their solution sets as `Interval` values.  An invalid input interval or an
- * empty intersection is represented by `INVALID_INTVL`.
+ * empty intersection is represented by `INVALID_INTERVAL`.
  */
 
 #ifndef DIOSOLVER_INEQUALITY_H
@@ -52,7 +52,7 @@ Interval solve_ineq(int con, int coeff, Op op, int target);
  * @param coeff Coefficient of `x`; must not be zero.
  * @param intvl Allowed interval for `con + coeff * x`.
  * @return An `Interval` containing the real values of `x` that satisfy the
- *         constraint, or `INVALID_INTVL` when `intvl` is invalid.
+ *         constraint, or `INVALID_INTERVAL` when `intvl` is invalid.
  */
 Interval solve_ineq_in(int con, int coeff, Interval intvl);
 
@@ -72,7 +72,7 @@ Interval solve_ineq_in(int con, int coeff, Interval intvl);
  * @param xi Allowed interval for the first affine expression.
  * @param yi Allowed interval for the second affine expression.
  * @return An `Interval` containing the shared parameter values satisfying both
- *         constraints, or `INVALID_INTVL` when the intersection is empty or
+ *         constraints, or `INVALID_INTERVAL` when the intersection is empty or
  *         either input interval is invalid.
  */
 Interval solve_ineq_sys(int x_con, int x_coeff, int y_con, int y_coeff,

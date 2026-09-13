@@ -3,6 +3,54 @@
 #include <math.h>
 #include <stdlib.h>
 
+const Interval REAL_INTERVAL = {
+    .low = NEG_INF,
+    .high = POS_INF,
+    .left_open = true,
+    .right_open = true,
+    .valid = true,
+};
+
+const Interval POSITIVE_INTERVAL = {
+    .low = 0,
+    .high = POS_INF,
+    .left_open = true,
+    .right_open = true,
+    .valid = true,
+};
+
+const Interval NEGATIVE_INTERVAL = {
+    .low = NEG_INF,
+    .high = 0,
+    .left_open = true,
+    .right_open = true,
+    .valid = true,
+};
+
+const Interval NONPOSITIVE_INTERVAL = {
+    .low = NEG_INF,
+    .high = 0,
+    .left_open = true,
+    .right_open = false,
+    .valid = true,
+};
+
+const Interval NONNEGATIVE_INTERVAL = {
+    .low = 0,
+    .high = POS_INF,
+    .left_open = false,
+    .right_open = true,
+    .valid = true,
+};
+
+const Interval INVALID_INTERVAL = {
+    .low = 0,
+    .high = 0,
+    .left_open = true,
+    .right_open = true,
+    .valid = false,
+};
+
 static bool is_int(const long double num) {
     return isfinite(num) && truncl(num) == num;
 }
@@ -54,7 +102,7 @@ bool is_in_interval(const double n, const Interval intvl) {
 
 Interval intersection(const Interval i1, const Interval i2) {
     if (!is_valid_interval(i1) || !is_valid_interval(i2)) {
-        return INVALID_INTVL;
+        return INVALID_INTERVAL;
     }
 
     const double low = fmax(i1.low, i2.low);
@@ -79,12 +127,12 @@ Interval intersection(const Interval i1, const Interval i2) {
     }
 
     const Interval intvl = make_interval(low, high, left_open, right_open);
-    return is_valid_interval(intvl) ? intvl : INVALID_INTVL;
+    return is_valid_interval(intvl) ? intvl : INVALID_INTERVAL;
 }
 
 Interval int_interval(const Interval intvl) {
     if (!is_valid_interval(intvl)) {
-        return INVALID_INTVL;
+        return INVALID_INTERVAL;
     }
 
     int low;

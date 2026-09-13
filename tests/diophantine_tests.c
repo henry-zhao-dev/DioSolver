@@ -9,7 +9,7 @@ static void test_make_solution(void) {
     assert(solution.x == 13);
     assert(solution.y == -37);
     assert(solution.exist);
-    assert(!NO_SOLN.exist);
+    assert(!NO_SOLUTION.exist);
 }
 
 static void test_make_lde(void) {
@@ -18,8 +18,8 @@ static void test_make_lde(void) {
     assert(lde.a == 9);
     assert(lde.b == 5);
     assert(lde.c == 137);
-    assert(equal_interval(lde.xi, REAL));
-    assert(equal_interval(lde.yi, REAL));
+    assert(equal_interval(lde.xi, REAL_INTERVAL));
+    assert(equal_interval(lde.yi, REAL_INTERVAL));
 
     Interval xi = make_interval(0, 10, false, false);
     Interval yi = make_interval(-10, 10, false, false);

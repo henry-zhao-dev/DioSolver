@@ -45,46 +45,52 @@ static void test_solve_ineq(void) {
     assert(equal_interval(solve_ineq(5, -3, LESS_EQ, 8),
                           make_interval(-1, POS_INF, false, true)));
 
-    assert(equal_interval(solve_ineq(0, -1, LESS_EQ, 0), NONNEG));
+    assert(equal_interval(solve_ineq(0, -1, LESS_EQ, 0), NONNEGATIVE_INTERVAL));
 
-    assert(equal_interval(solve_ineq(50, 4, LESS, POS_INF), REAL));
+    assert(equal_interval(solve_ineq(50, 4, LESS, POS_INF), REAL_INTERVAL));
 }
 
 static void test_solve_ineq_in(void) {
-    assert(equal_interval(solve_ineq_in(50, 4, POS),
+    assert(equal_interval(solve_ineq_in(50, 4, POSITIVE_INTERVAL),
                           make_interval(-50.0 / 4, POS_INF, true, true)));
 
-    assert(equal_interval(solve_ineq_in(50, 4, NEG),
+    assert(equal_interval(solve_ineq_in(50, 4, NEGATIVE_INTERVAL),
                           make_interval(NEG_INF, -50.0 / 4, true, true)));
 
-    assert(equal_interval(solve_ineq_in(50, -4, POS),
+    assert(equal_interval(solve_ineq_in(50, -4, POSITIVE_INTERVAL),
                           make_interval(NEG_INF, 50.0 / 4, true, true)));
 
-    assert(equal_interval(solve_ineq_in(-50, 4, POS),
+    assert(equal_interval(solve_ineq_in(-50, 4, POSITIVE_INTERVAL),
                           make_interval(50.0 / 4, POS_INF, true, true)));
 
-    assert(equal_interval(solve_ineq_in(-50, -4, POS),
+    assert(equal_interval(solve_ineq_in(-50, -4, POSITIVE_INTERVAL),
                           make_interval(NEG_INF, -50.0 / 4, true, true)));
 }
 
 static void test_solve_ineq_sys(void) {
-    assert(equal_interval(solve_ineq_sys(-137, 5, 274, -9, POS, POS),
-                          make_interval(137.0 / 5, 274.0 / 9, true, true)));
+    assert(equal_interval(
+        solve_ineq_sys(-137, 5, 274, -9, POSITIVE_INTERVAL, POSITIVE_INTERVAL),
+        make_interval(137.0 / 5, 274.0 / 9, true, true)));
 
-    assert(equal_interval(solve_ineq_sys(137, 5, 274, 9, POS, POS),
-                          make_interval(-137.0 / 5, POS_INF, true, true)));
+    assert(equal_interval(
+        solve_ineq_sys(137, 5, 274, 9, POSITIVE_INTERVAL, POSITIVE_INTERVAL),
+        make_interval(-137.0 / 5, POS_INF, true, true)));
 
-    assert(equal_interval(solve_ineq_sys(-137, -5, -274, -9, POS, POS),
+    assert(equal_interval(solve_ineq_sys(-137, -5, -274, -9, POSITIVE_INTERVAL,
+                                         POSITIVE_INTERVAL),
                           make_interval(NEG_INF, -274.0 / 9, true, true)));
 
-    assert(equal_interval(solve_ineq_sys(137, -5, -274, 9, POS, POS),
-                          INVALID_INTVL));
+    assert(equal_interval(
+        solve_ineq_sys(137, -5, -274, 9, POSITIVE_INTERVAL, POSITIVE_INTERVAL),
+        INVALID_INTERVAL));
 
-    assert(equal_interval(solve_ineq_sys(50, 4, -50, -5, POS, POS),
-                          make_interval(-50.0 / 4, -10, true, true)));
+    assert(equal_interval(
+        solve_ineq_sys(50, 4, -50, -5, POSITIVE_INTERVAL, POSITIVE_INTERVAL),
+        make_interval(-50.0 / 4, -10, true, true)));
 
-    assert(equal_interval(solve_ineq_sys(-50, 4, -50, 5, POS, POS),
-                          make_interval(50.0 / 4, POS_INF, true, true)));
+    assert(equal_interval(
+        solve_ineq_sys(-50, 4, -50, 5, POSITIVE_INTERVAL, POSITIVE_INTERVAL),
+        make_interval(50.0 / 4, POS_INF, true, true)));
 }
 
 int main(void) {

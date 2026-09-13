@@ -25,12 +25,6 @@
 extern "C" {
 #endif
 
-/** A `Solution` value indicating that no solution was found. */
-#define NO_SOLN     \
-    (Solution) {    \
-        0, 0, false \
-    }
-
 /**
  * Represents one candidate solution to an LDE.
  *
@@ -43,6 +37,9 @@ typedef struct Solution {
 
     bool exist; /**< True when this value represents a solution. */
 } Solution;
+
+/** A `Solution` value indicating that no solution was found. */
+extern const Solution NO_SOLUTION;
 
 /**
  * Creates a successful solution value with specified coordinates.
@@ -61,7 +58,7 @@ Solution make_solution(int x, int y);
  *
  * `xi` and `yi` are the domains for `x` and `y`, respectively.  Because this
  * is a Diophantine equation, only integer points inside those intervals are
- * considered by the solver.  Use `REAL` for the library's unconstrained
+ * considered by the solver.  Use `REAL_INTERVAL` for the library's unconstrained
  * interval.
  */
 typedef struct LDE {
@@ -73,12 +70,13 @@ typedef struct LDE {
 } LDE;
 
 /**
- * Creates an LDE whose variables use the unconstrained `REAL` interval.
+ * Creates an LDE whose variables use the unconstrained `REAL_INTERVAL` interval.
  * 
  * @param a Coefficient of `x`.
  * @param b Coefficient of `y`.
  * @param c Constant term on the right-hand side.
- * @return An initialized `LDE` with `xi == REAL` and `yi == REAL`.
+ * @return An initialized `LDE` with `xi == REAL_INTERVAL` and
+ *         `yi == REAL_INTERVAL`.
  */
 LDE make_lde(int a, int b, int c);
 

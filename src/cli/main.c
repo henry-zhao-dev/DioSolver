@@ -68,15 +68,15 @@ Interval select_domain(char var) {
 
     switch (choice) {
     case 1:
-        return REAL;
+        return REAL_INTERVAL;
     case 2:
-        return POS;
+        return POSITIVE_INTERVAL;
     case 3:
-        return NEG;
+        return NEGATIVE_INTERVAL;
     case 4:
-        return NONPOS;
+        return NONNEGATIVE_INTERVAL;
     case 5:
-        return NONNEG;
+        return NONNEGATIVE_INTERVAL;
     };
     return ask_intvl(var);
 }

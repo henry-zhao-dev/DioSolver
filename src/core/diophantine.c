@@ -3,12 +3,15 @@
 #include <diosolver/string_utils.h>
 #include <stdlib.h>
 
+const Solution NO_SOLUTION = {0, 0, false};
+
 Solution make_solution(const int x, const int y) {
     return (Solution){.x = x, .y = y, .exist = true};
 }
 
 LDE make_lde(const int a, const int b, const int c) {
-    return (LDE){.a = a, .b = b, .c = c, .xi = REAL, .yi = REAL};
+    return (LDE){
+        .a = a, .b = b, .c = c, .xi = REAL_INTERVAL, .yi = REAL_INTERVAL};
 }
 
 LDE make_lde_in(const int a, const int b, const int c, const Interval xi,
@@ -35,7 +38,7 @@ Solution eea_lde_row(const LDE lde, const EEAR row) {
 
     const int gcd_ab = eea_gcd_row(row);
     if (c % gcd_ab != 0) {
-        return NO_SOLN;
+        return NO_SOLUTION;
     }
 
     const int factor = c / gcd_ab;
@@ -232,7 +235,7 @@ calist *lde_result(const LDE lde) {
     const Interval xi = lde.xi;
     const Interval yi = lde.yi;
 
-    result = calist_create(ctype_string());
+    result = calist_create(cvalue_string());
     append_result(fstr("Solving the Linear Diophantine Equation (LDE):\n"));
     append_result(lde_to_str(a, b, c));
     append_result(fstr("Where:\n"));

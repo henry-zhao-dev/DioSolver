@@ -35,20 +35,20 @@ static int compare_eear(const void *item1, const void *item2) {
     return (row1->q > row2->q) - (row1->q < row2->q);
 }
 
-static ctype *eear_ctype_instance;
+static cvalue *eear_cvalue;
 
 static void destroy_eear_ctype(void) {
-    ctype_destroy(eear_ctype_instance);
-    eear_ctype_instance = NULL;
+    cvalue_destroy(eear_cvalue);
+    eear_cvalue = NULL;
 }
 
-static const ctype *eear_ctype(void) {
-    if (eear_ctype_instance == NULL) {
-        eear_ctype_instance = ctype_create(sizeof(EEAR), dup_eear, destroy_eear,
-                                           print_eear, compare_eear);
+static const cvalue *eear_ctype(void) {
+    if (eear_cvalue == NULL) {
+        eear_cvalue = cvalue_create(sizeof(EEAR), dup_eear, destroy_eear,
+                                    print_eear, compare_eear);
         atexit(destroy_eear_ctype);
     }
-    return eear_ctype_instance;
+    return eear_cvalue;
 }
 
 static int max_int(const int a, const int b) {

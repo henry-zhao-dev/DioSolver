@@ -4,7 +4,7 @@
  *
  * An `Interval` represents a real interval with independently open or closed
  * endpoints.  `NEG_INF` and `POS_INF` are the library's sentinel bounds for
- * unbounded intervals.  `INVALID_INTVL` is the standard sentinel for an
+ * unbounded intervals.  `INVALID_INTERVAL` is the standard sentinel for an
  * explicitly invalid interval or a failed interval intersection.
  */
 
@@ -22,43 +22,7 @@ extern "C" {
 #define POS_INF INT_MAX
 
 /** Sentinel value used as the negative-infinity bound. */
-#define NEG_INF (-POS_INF)
-
-/** The unbounded interval `(-inf, inf)`. */
-#define REAL                               \
-    (Interval) {                           \
-        NEG_INF, POS_INF, true, true, true \
-    }
-
-/** The positive interval `(0, inf)`. */
-#define POS                          \
-    (Interval) {                     \
-        0, POS_INF, true, true, true \
-    }
-
-/** The negative interval `(-inf, 0)`. */
-#define NEG                          \
-    (Interval) {                     \
-        NEG_INF, 0, true, true, true \
-    }
-
-/** The non-positive interval `(-inf, 0]`. */
-#define NONPOS                        \
-    (Interval) {                      \
-        NEG_INF, 0, true, false, true \
-    }
-
-/** The non-negative interval `[0, inf)`. */
-#define NONNEG                        \
-    (Interval) {                      \
-        0, POS_INF, false, true, true \
-    }
-
-/** Invalid interval sentinel with `valid` set to false. */
-#define INVALID_INTVL           \
-    (Interval) {                \
-        0, 0, true, true, false \
-    }
+#define NEG_INF INT_MIN
 
 /**
  * Represents a real mathematical interval.
@@ -75,6 +39,24 @@ typedef struct Interval {
 
     bool valid; /**< True when the interval has been marked valid. */
 } Interval;
+
+/** The unbounded interval `(-inf, inf)`. */
+extern const Interval REAL_INTERVAL;
+
+/** The positive interval `(0, inf)`. */
+extern const Interval POSITIVE_INTERVAL;
+
+/** The negative interval `(-inf, 0)`. */
+extern const Interval NEGATIVE_INTERVAL;
+
+/** The non-positive interval `(-inf, 0]`. */
+extern const Interval NONPOSITIVE_INTERVAL;
+
+/** The non-negative interval `[0, inf)`. */
+extern const Interval NONNEGATIVE_INTERVAL;
+
+/** Invalid interval sentinel with `valid` set to false. */
+extern const Interval INVALID_INTERVAL;
 
 /**
  * Creates an interval with specified bounds and endpoint openness.
@@ -144,11 +126,11 @@ bool is_in_interval(double n, Interval intvl);
  * Computes the intersection of two intervals.
  *
  * If either input is invalid or the intervals do not overlap, the result is
- * `INVALID_INTVL`.  Endpoint openness is preserved at shared bounds.
+ * `INVALID_INTERVAL`.  Endpoint openness is preserved at shared bounds.
  * 
  * @param i1 The first interval.
  * @param i2 The second interval.
- * @return The intersection of `i1` and `i2`, or `INVALID_INTVL` when no valid
+ * @return The intersection of `i1` and `i2`, or `INVALID_INTERVAL` when no valid
  *         intersection exists.
  */
 Interval intersection(Interval i1, Interval i2);
@@ -158,7 +140,7 @@ Interval intersection(Interval i1, Interval i2);
  *
  * The result contains the integer values in `intvl`, with finite endpoints
  * rounded inward and open integer endpoints excluded.  If `intvl` is invalid,
- * the function returns `INVALID_INTVL`; callers should also validate the
+ * the function returns `INVALID_INTERVAL`; callers should also validate the
  * result when a valid integer interval is required, since a valid real
  * interval may contain no integers.
  * 

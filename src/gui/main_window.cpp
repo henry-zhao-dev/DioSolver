@@ -132,15 +132,15 @@ Interval DomainBox::interval() {
     int index = intvlBox->currentIndex();
     switch (index) {
     case 0:
-        return REAL;
+        return REAL_INTERVAL;
     case 1:
-        return POS;
+        return POSITIVE_INTERVAL;
     case 2:
-        return NEG;
+        return NEGATIVE_INTERVAL;
     case 3:
-        return NONPOS;
+        return NONPOSITIVE_INTERVAL;
     case 4:
-        return NONNEG;
+        return NONNEGATIVE_INTERVAL;
     }
     return intvlFrame->customInterval();
 }
