@@ -14,7 +14,7 @@ set(DIOSOLVER_FORMAT_SOURCES
     include/diosolver/inequality.h
     include/diosolver/interval.h
     include/diosolver/string_utils.h
-    src/cli/main.c
+    src/cli/main.cpp
     src/core/diophantine.c
     src/core/extended_euclidean.c
     src/core/inequality.c
@@ -93,7 +93,7 @@ if(NOT WIN32)
 endif()
 
 if(DIOSOLVER_BUILD_CLI)
-    add_executable(diosolver_cli src/cli/main.c)
+    add_executable(diosolver_cli src/cli/main.cpp)
     set_target_properties(diosolver_cli PROPERTIES OUTPUT_NAME diosolver-cli)
     target_link_libraries(diosolver_cli PRIVATE DioSolver::Core)
 endif()
